@@ -28,7 +28,7 @@ $ make
 ```
 
 ## How to run?
-Traceroute can be run directly using the executable file in the ``bin`` root directory:
+Traceroute can be run directly using the executable file in the `bin` root directory:
 ```sh
 $ sudo /path-to-directory/bin/traceroute
 ```
