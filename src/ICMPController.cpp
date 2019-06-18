@@ -1,17 +1,17 @@
 #include "ICMPController.hpp"
 
-void ICMPController::echo_request(const IPAddress & addr, uint16_t id, uint16_t seq, int ttl)
+void ICMPController::echo_request(const IPAddress & addr, uint16_t id, uint16_t ttl)
 {
     for(int i = 0; i < 3; ++i)
     {
-        icmphdr header = sender.prepare_icmp(id, 3 * seq + i);
+        icmphdr header = sender.prepare_icmp(id, 3 * ttl + i);
 
         sender.set_receiver(addr);
         sender.send(&header, sizeof(header), ttl);
     }
 }
 
-std::tuple<std::set<IPAddress>, int> ICMPController::echo_reply(uint16_t id, uint16_t seq)
+std::tuple<std::set<IPAddress>, int> ICMPController::echo_reply(uint16_t id, uint16_t ttl)
 {
     std::set<IPAddress> recvaddr;
     fd_set fd;
@@ -20,33 +20,24 @@ std::tuple<std::set<IPAddress>, int> ICMPController::echo_reply(uint16_t id, uin
     int recvnum = 0;
 
     FD_ZERO(&fd);
-    FD_SET(socket.get_descriptor(), &fd);
+    FD_SET(socket.descriptor(), &fd);
     timer.tv_sec = 1;
     timer.tv_usec = 0;
 
     do
     {
-        int ready = select(socket.get_descriptor() + 1, &fd, nullptr, nullptr, &timer);
+        int ready = select(socket.descriptor() + 1, &fd, nullptr, nullptr, &timer);
 
         if(ready < 0)
             throw SocketException(strerror(errno));
 
-        if(ready == 0 && recvnum == 0)
-            throw TimeExceededException("");
-
-        if(ready == 0 && recvnum > 0)
+        if(ready == 0)
             return std::make_tuple(recvaddr, -1);
 
-        IPAddress address;
+        IPAddress address = recv_echo(id, ttl);
 
-        try
-        {
-            address = recv_echo(id, seq);
-        }
-        catch(const NotMyReplyException & e)
-        {
+        if(address == IPAddress(0))
             continue;
-        }
 
         recvaddr.insert(address);
         avg_time = (avg_time + 1000000 - timer.tv_usec) / 2;
@@ -56,7 +47,7 @@ std::tuple<std::set<IPAddress>, int> ICMPController::echo_reply(uint16_t id, uin
     return std::make_tuple(recvaddr, avg_time);
 }
 
-IPAddress ICMPController::recv_echo(uint16_t id, uint16_t seq)
+IPAddress ICMPController::recv_echo(uint16_t id, uint16_t ttl)
 {
     std::vector<uint8_t> message = receiver.receive();
     iphdr * hIP;
@@ -67,8 +58,8 @@ IPAddress ICMPController::recv_echo(uint16_t id, uint16_t seq)
 
     if(hICMP->type == 0)
     {
-        if(hICMP->un.echo.id != id || hICMP->un.echo.sequence / 3 != seq)
-            throw NotMyReplyException("");
+        if(hICMP->un.echo.id != id || hICMP->un.echo.sequence / 3 != ttl)
+            return IPAddress(0);
     }
     else if(hICMP->type == 11)
     {
@@ -77,8 +68,8 @@ IPAddress ICMPController::recv_echo(uint16_t id, uint16_t seq)
 
         std::tie(hIP_r, hICMP_r, std::ignore) = take_headers(rest);
 
-        if(hICMP_r->un.echo.id != id || hICMP_r->un.echo.sequence / 3 != seq)
-            throw NotMyReplyException("");
+        if(hICMP_r->un.echo.id != id || hICMP_r->un.echo.sequence / 3 != ttl)
+            return IPAddress(0);
     }
 
     return receiver.take_address();

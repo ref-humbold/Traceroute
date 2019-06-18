@@ -2,62 +2,39 @@
 #define _IP_ADDRESS_HPP_
 
 #include <cstdlib>
-#include <algorithm>
 #include <exception>
-#include <numeric>
+#include <iostream>
 #include <stdexcept>
+#include <algorithm>
 #include <string>
 #include <tuple>
 #include <vector>
+#include <numeric>
 
 using addr_t = unsigned int;
 
-class IPAddressException : public std::runtime_error
-{
-public:
-    explicit IPAddressException(const std::string & s) : std::runtime_error(s)
-    {
-    }
-
-    explicit IPAddressException(const char * s) : std::runtime_error(s)
-    {
-    }
-};
-
 class IPAddress
 {
-private:
-    addr_t address;
-
 public:
-    IPAddress() : address{0}
+    explicit IPAddress(addr_t addr) : address{addr}
     {
     }
 
-    explicit IPAddress(addr_t address) : address{address}
-    {
-    }
-
-    explicit IPAddress(const std::string & address);
+    explicit IPAddress(const std::string & addr);
 
     friend bool operator==(const IPAddress & addr1, const IPAddress & addr2);
     friend bool operator<(const IPAddress & addr1, const IPAddress & addr2);
-
-    operator bool() const
-    {
-        return address != 0;
-    }
+    friend std::ostream & operator<<(std::ostream & os, const IPAddress & addr);
 
     explicit operator addr_t() const
     {
         return address;
     }
 
-    explicit operator std::tuple<uint8_t, uint8_t, uint8_t, uint8_t>() const;
     explicit operator std::string() const;
 
 private:
-    addr_t parse(const std::string & addr);
+    addr_t address;
 };
 
 inline bool operator==(const IPAddress & addr1, const IPAddress & addr2)
@@ -89,5 +66,7 @@ inline bool operator>=(const IPAddress & addr1, const IPAddress & addr2)
 {
     return !(addr1 < addr2);
 }
+
+std::ostream & operator<<(std::ostream & os, const IPAddress & addr);
 
 #endif

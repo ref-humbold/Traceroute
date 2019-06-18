@@ -22,7 +22,7 @@ public:
     {
     }
 
-    void send(const void * msg_buf, int msg_size, int ttl);
+    void send(const void * msg_buf, int msg_size, uint16_t ttl);
     void set_receiver(const IPAddress & addr);
     icmphdr prepare_icmp(uint16_t id, uint16_t seq);
 

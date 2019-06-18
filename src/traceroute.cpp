@@ -1,7 +1,7 @@
 #include <cstdlib>
 #include <cstring>
-#include <algorithm>
 #include <iostream>
+#include <algorithm>
 #include <set>
 #include <string>
 #include <unistd.h>
@@ -9,9 +9,9 @@
 #include "IPAddress.hpp"
 #include "RawSocket.hpp"
 
-void print_results(int ttl, const std::set<IPAddress> & recvaddr, int avg_time)
+void print_results(uint16_t ttl, const std::set<IPAddress> & recvaddr, int avg_time)
 {
-    std::cout << ttl << ". ";
+    std::cout << static_cast<unsigned int>(ttl) << ". ";
 
     if(avg_time < 0)
     {
@@ -20,7 +20,7 @@ void print_results(int ttl, const std::set<IPAddress> & recvaddr, int avg_time)
         else
         {
             for(auto addr : recvaddr)
-                std::cout << std::string(addr) << " ";
+                std::cout << addr << " ";
 
             std::cout << "???\n";
         }
@@ -28,35 +28,10 @@ void print_results(int ttl, const std::set<IPAddress> & recvaddr, int avg_time)
     else
     {
         for(auto addr : recvaddr)
-            std::cout << std::string(addr) << " ";
+            std::cout << addr << " ";
 
         std::cout << avg_time / 1000 << "ms\n";
     }
-}
-
-bool send_message(ICMPController & sck, const IPAddress & addr, int ttl)
-{
-    uint16_t pid = getpid();
-    int seq = ttl;
-
-    sck.echo_request(addr, pid, seq, ttl);
-
-    std::set<IPAddress> recvaddr;
-    int avg_time;
-
-    try
-    {
-        std::tie(recvaddr, avg_time) = sck.echo_reply(pid, seq);
-    }
-    catch(const TimeExceededException & e)
-    {
-        avg_time = -1;
-    }
-
-    print_results(ttl, recvaddr, avg_time);
-
-    return std::any_of(recvaddr.begin(), recvaddr.end(),
-                       [addr](const IPAddress & a) { return a == addr; });
 }
 
 int main(int argc, char * argv[])
@@ -65,13 +40,28 @@ int main(int argc, char * argv[])
     ICMPController socket_ctrl = ICMPController(socket);
 
     if(argc < 2)
-        throw std::logic_error("No destination IP specified");
+    {
+        std::cerr << "No destination IP specified.";
+
+        return 1;
+    }
 
     IPAddress addr(argv[1]);
+    uint16_t pid = getpid();
 
     for(int i = 1; i <= 30; ++i)
-        if(send_message(socket_ctrl, addr, i))
+    {
+        std::set<IPAddress> recvaddr;
+        int avg_time;
+
+        socket_ctrl.echo_request(addr, pid, i);
+        std::tie(recvaddr, avg_time) = socket_ctrl.echo_reply(pid, i);
+        print_results(i, recvaddr, avg_time);
+
+        if(std::any_of(recvaddr.begin(), recvaddr.end(),
+                       [addr](const IPAddress & a) { return a == addr; }))
             break;
+    }
 
     return 0;
 }

@@ -1,10 +1,10 @@
 #include "ICMPSender.hpp"
 
-void ICMPSender::send(const void * msg_buf, int msg_size, int ttl)
+void ICMPSender::send(const void * msg_buf, int msg_size, uint16_t ttl)
 {
-    setsockopt(socket.get_descriptor(), IPPROTO_IP, IP_TTL, &ttl, sizeof(int));
+    setsockopt(socket.descriptor(), IPPROTO_IP, IP_TTL, &ttl, sizeof(uint16_t));
 
-    ssize_t sent_size = sendto(socket.get_descriptor(), msg_buf, msg_size, 0,
+    ssize_t sent_size = sendto(socket.descriptor(), msg_buf, msg_size, 0,
                                (sockaddr *)&receiver_address, sizeof(receiver_address));
 
     if(sent_size < 0)
