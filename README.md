@@ -9,10 +9,13 @@ Traceroute shows a path through the Internet from your computer to a specified a
 ## Dependencies
 
 ### Standard build & run
+> *versions used by the author are in double parentheses and italic*
+
 Build process:
-+ C++ 14
-+ [CMake](https://cmake.org/)
-+ [GNU Make](https://www.gnu.org/software/make)
++ Linux-based operating system *((Debian testing))*
++ C++ 14 compiler *((g++ 8.3.0))*
++ [CMake](https://cmake.org/) *((3.13.4))*
++ [GNU Make](https://www.gnu.org/software/make) *((4.2.1))*
 
 -----
 
@@ -21,8 +24,9 @@ Traceroute can be built using **CMake** that generates **GNU Make** Makefile.
 
 Follow these steps to build:
 ```sh
-$ cd /path-to-directory/
-$ mkdir build && cd build
+$ cd /path-to-project-directory/
+$ mkdir build
+$ cd build
 $ cmake ..
 $ make
 ```
@@ -30,7 +34,7 @@ $ make
 ## How to run?
 Traceroute can be run directly using the executable file in the `bin` root directory:
 ```sh
-$ sudo /path-to-directory/bin/traceroute
+$ sudo /path-to-project-directory/bin/traceroute
 ```
 
 Make sure you've got ``sudo`` priviledges so as to use raw sockets! Otherwise traceroute won't work.

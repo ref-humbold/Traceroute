@@ -1,3 +1,7 @@
-# C++, CMake
+# [ C , C++ ]
+# C++, CMake output
 bin
 build
+
+# Visual Studio Code files
+.vscode
