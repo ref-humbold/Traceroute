@@ -1,6 +1,6 @@
 #include "IPAddress.hpp"
 
-IPAddress::IPAddress(const std::string & addr)
+IPAddress::IPAddress(const std::string & st)
 {
     std::vector<std::string> splitted;
     std::vector<addr_t> addr_bytes;
@@ -8,16 +8,16 @@ IPAddress::IPAddress(const std::string & addr)
 
     while(begin_pos != std::string::npos)
     {
-        size_t end_pos = addr.find(".", begin_pos);
+        size_t end_pos = st.find(".", begin_pos);
 
         if(end_pos != std::string::npos)
         {
-            splitted.push_back(addr.substr(begin_pos, end_pos - begin_pos));
+            splitted.push_back(st.substr(begin_pos, end_pos - begin_pos));
             begin_pos = end_pos + 1;
         }
         else
         {
-            splitted.push_back(addr.substr(begin_pos));
+            splitted.push_back(st.substr(begin_pos));
             begin_pos = end_pos;
         }
     }
@@ -49,9 +49,9 @@ IPAddress::operator std::string() const
            + std::to_string(address & 0x000000FF);
 }
 
-std::ostream & operator<<(std::ostream & os, const IPAddress & addr)
+std::ostream & operator<<(std::ostream & os, const IPAddress & a)
 {
-    os << static_cast<std::string>(addr);
+    os << static_cast<std::string>(a);
 
     return os;
 }

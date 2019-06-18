@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(traceroute VERSION 0.3.190423)
+project(traceroute VERSION 0.4.190618)
 
 # COMPILER
 set(CMAKE_CXX_STANDARD 14)

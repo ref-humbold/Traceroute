@@ -11,12 +11,12 @@ void ICMPController::echo_request(const IPAddress & addr, uint16_t id, uint16_t 
     }
 }
 
-std::tuple<std::set<IPAddress>, int> ICMPController::echo_reply(uint16_t id, uint16_t ttl)
+std::tuple<std::set<IPAddress>, ssize_t> ICMPController::echo_reply(uint16_t id, uint16_t ttl)
 {
     std::set<IPAddress> recvaddr;
     fd_set fd;
     timeval timer;
-    int avg_time = 0;
+    ssize_t avg_time = 0;
     int recvnum = 0;
 
     FD_ZERO(&fd);

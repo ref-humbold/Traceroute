@@ -16,15 +16,20 @@ using addr_t = unsigned int;
 class IPAddress
 {
 public:
-    explicit IPAddress(addr_t addr) : address{addr}
+    explicit IPAddress(addr_t a) : address{a}
     {
     }
 
-    explicit IPAddress(const std::string & addr);
+    explicit IPAddress(const std::string & st);
 
-    friend bool operator==(const IPAddress & addr1, const IPAddress & addr2);
-    friend bool operator<(const IPAddress & addr1, const IPAddress & addr2);
-    friend std::ostream & operator<<(std::ostream & os, const IPAddress & addr);
+    IPAddress(const IPAddress & a) = default;
+    IPAddress(IPAddress && a) = default;
+    IPAddress & operator=(const IPAddress & a) = default;
+    IPAddress & operator=(IPAddress && a) = default;
+
+    friend bool operator==(const IPAddress & a1, const IPAddress & a2);
+    friend bool operator<(const IPAddress & a1, const IPAddress & a2);
+    friend std::ostream & operator<<(std::ostream & os, const IPAddress & a);
 
     explicit operator addr_t() const
     {
@@ -37,34 +42,34 @@ private:
     addr_t address;
 };
 
-inline bool operator==(const IPAddress & addr1, const IPAddress & addr2)
+inline bool operator==(const IPAddress & a1, const IPAddress & a2)
 {
-    return addr1.address == addr2.address;
+    return a1.address == a2.address;
 }
 
-inline bool operator!=(const IPAddress & addr1, const IPAddress & addr2)
+inline bool operator!=(const IPAddress & a1, const IPAddress & a2)
 {
-    return !(addr1 == addr2);
+    return !(a1 == a2);
 }
 
-inline bool operator<(const IPAddress & addr1, const IPAddress & addr2)
+inline bool operator<(const IPAddress & a1, const IPAddress & a2)
 {
-    return addr1.address < addr2.address;
+    return a1.address < a2.address;
 }
 
-inline bool operator<=(const IPAddress & addr1, const IPAddress & addr2)
+inline bool operator<=(const IPAddress & a1, const IPAddress & a2)
 {
-    return (addr1 < addr2) || (addr1 == addr2);
+    return (a1 < a2) || (a1 == a2);
 }
 
-inline bool operator>(const IPAddress & addr1, const IPAddress & addr2)
+inline bool operator>(const IPAddress & a1, const IPAddress & a2)
 {
-    return !(addr1 <= addr2);
+    return !(a1 <= a2);
 }
 
-inline bool operator>=(const IPAddress & addr1, const IPAddress & addr2)
+inline bool operator>=(const IPAddress & a1, const IPAddress & a2)
 {
-    return !(addr1 < addr2);
+    return !(a1 < a2);
 }
 
 std::ostream & operator<<(std::ostream & os, const IPAddress & addr);

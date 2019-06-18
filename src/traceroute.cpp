@@ -9,28 +9,25 @@
 #include "IPAddress.hpp"
 #include "RawSocket.hpp"
 
-void print_results(uint16_t ttl, const std::set<IPAddress> & recvaddr, int avg_time)
+void print_results(uint16_t ttl, const std::set<IPAddress> & recvaddr, ssize_t avg_time)
 {
     std::cout << static_cast<unsigned int>(ttl) << ". ";
 
-    if(avg_time < 0)
+    if(avg_time < 0 && recvaddr.size() == 0)
+        std::cout << "*\n";
+    else if(avg_time < 0)
     {
-        if(recvaddr.size() == 0)
-            std::cout << "*\n";
-        else
-        {
-            for(auto addr : recvaddr)
-                std::cout << addr << " ";
+        for(auto addr : recvaddr)
+            std::cout << addr << " ";
 
-            std::cout << "???\n";
-        }
+        std::cout << "???\n";
     }
     else
     {
         for(auto addr : recvaddr)
             std::cout << addr << " ";
 
-        std::cout << avg_time / 1000 << "ms\n";
+        std::cout << "[" << avg_time / 1000 << " ms]\n";
     }
 }
 
@@ -52,7 +49,7 @@ int main(int argc, char * argv[])
     for(int i = 1; i <= 30; ++i)
     {
         std::set<IPAddress> recvaddr;
-        int avg_time;
+        ssize_t avg_time;
 
         socket_ctrl.echo_request(addr, pid, i);
         std::tie(recvaddr, avg_time) = socket_ctrl.echo_reply(pid, i);
