@@ -1,7 +1,10 @@
-# [ C , C++ ]
-# C++, CMake output
+# [ C / C++ ]
+# C / C++ / CMake output
 bin
 build
 
-# Visual Studio Code files
+# CLion
+.idea
+
+# Visual Studio Code
 .vscode
