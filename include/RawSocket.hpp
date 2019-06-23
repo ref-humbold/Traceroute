@@ -1,5 +1,5 @@
-#ifndef _RAW_SOCKET_HPP_
-#define _RAW_SOCKET_HPP_
+#ifndef RAW_SOCKET_HPP_
+#define RAW_SOCKET_HPP_
 
 #include <cstdlib>
 #include <cerrno>

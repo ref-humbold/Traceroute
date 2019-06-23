@@ -1,5 +1,5 @@
-#ifndef _ICMP_CONTROLLER_HPP_
-#define _ICMP_CONTROLLER_HPP_
+#ifndef ICMP_CONTROLLER_HPP_
+#define ICMP_CONTROLLER_HPP_
 
 #include <cstdlib>
 #include <cerrno>
@@ -29,7 +29,7 @@ public:
     }
 
     void echo_request(const IPAddress & addr, uint16_t id, uint16_t ttl);
-    std::tuple<std::set<IPAddress>, ssize_t> echo_reply(uint16_t id, uint16_t ttl);
+    std::tuple<std::set<IPAddress>, size_t, size_t> echo_reply(uint16_t id, uint16_t ttl);
 
 private:
     IPAddress recv_echo(uint16_t id, uint16_t ttl);

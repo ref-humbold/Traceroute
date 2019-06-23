@@ -1,5 +1,5 @@
-#ifndef _ICMP_SENDER_HPP_
-#define _ICMP_SENDER_HPP_
+#ifndef ICMP_SENDER_HPP_
+#define ICMP_SENDER_HPP_
 
 #include <cstdlib>
 #include <cerrno>

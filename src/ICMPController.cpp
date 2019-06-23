@@ -11,13 +11,14 @@ void ICMPController::echo_request(const IPAddress & addr, uint16_t id, uint16_t 
     }
 }
 
-std::tuple<std::set<IPAddress>, ssize_t> ICMPController::echo_reply(uint16_t id, uint16_t ttl)
+std::tuple<std::set<IPAddress>, size_t, size_t> ICMPController::echo_reply(uint16_t id,
+                                                                           uint16_t ttl)
 {
-    std::set<IPAddress> recvaddr;
+    std::set<IPAddress> recv_addr;
     fd_set fd;
     timeval timer;
-    ssize_t avg_time = 0;
-    int recvnum = 0;
+    size_t avg_time = 0;
+    size_t recv_num = 0;
 
     FD_ZERO(&fd);
     FD_SET(socket.descriptor(), &fd);
@@ -32,19 +33,19 @@ std::tuple<std::set<IPAddress>, ssize_t> ICMPController::echo_reply(uint16_t id,
             throw SocketException(strerror(errno));
 
         if(ready == 0)
-            return std::make_tuple(recvaddr, -1);
+            break;
 
         IPAddress address = recv_echo(id, ttl);
 
         if(address == IPAddress(0))
             continue;
 
-        recvaddr.insert(address);
+        recv_addr.insert(address);
         avg_time = (avg_time + 1000000 - timer.tv_usec) / 2;
-        ++recvnum;
-    } while(recvnum < 3);
+        ++recv_num;
+    } while(recv_num < 3);
 
-    return std::make_tuple(recvaddr, avg_time);
+    return std::make_tuple(recv_addr, avg_time, recv_num);
 }
 
 IPAddress ICMPController::recv_echo(uint16_t id, uint16_t ttl)

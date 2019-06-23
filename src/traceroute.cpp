@@ -9,25 +9,19 @@
 #include "IPAddress.hpp"
 #include "RawSocket.hpp"
 
-void print_results(uint16_t ttl, const std::set<IPAddress> & recvaddr, ssize_t avg_time)
+void print_results(uint16_t ttl, const std::set<IPAddress> & recv_addr, size_t avg_time,
+                   size_t recv_num)
 {
     std::cout << static_cast<unsigned int>(ttl) << ". ";
 
-    if(avg_time < 0 && recvaddr.size() == 0)
+    if(recv_addr.empty())
         std::cout << "*\n";
-    else if(avg_time < 0)
-    {
-        for(auto addr : recvaddr)
-            std::cout << addr << " ";
-
-        std::cout << "???\n";
-    }
     else
     {
-        for(auto addr : recvaddr)
+        for(auto addr : recv_addr)
             std::cout << addr << " ";
 
-        std::cout << "[" << avg_time / 1000 << " ms]\n";
+        std::cout << "[" << avg_time / 1000 << " ms (" << recv_num << ")]\n";
     }
 }
 
@@ -45,17 +39,20 @@ int main(int argc, char * argv[])
 
     IPAddress addr(argv[1]);
     uint16_t pid = getpid();
+    int steps = 30;
 
-    for(int i = 1; i <= 30; ++i)
+    std::cout << "traceroute :: destination " << addr << " :: max " << steps << " steps\n";
+
+    for(int i = 1; i <= steps; ++i)
     {
-        std::set<IPAddress> recvaddr;
-        ssize_t avg_time;
+        std::set<IPAddress> recv_addr;
+        size_t avg_time, recv_num;
 
         socket_ctrl.echo_request(addr, pid, i);
-        std::tie(recvaddr, avg_time) = socket_ctrl.echo_reply(pid, i);
-        print_results(i, recvaddr, avg_time);
+        std::tie(recv_addr, avg_time, recv_num) = socket_ctrl.echo_reply(pid, i);
+        print_results(i, recv_addr, avg_time, recv_num);
 
-        if(std::any_of(recvaddr.begin(), recvaddr.end(),
+        if(std::any_of(recv_addr.begin(), recv_addr.end(),
                        [addr](const IPAddress & a) { return a == addr; }))
             break;
     }

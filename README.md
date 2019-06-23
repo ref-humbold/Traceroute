@@ -5,14 +5,10 @@ Simple ICMP traceroute
 Traceroute shows a path through the Internet from your computer to a specified address. This implementation uses ICMP packages and raw sockets.
 
 ### Output format
-When there are replies for *all* of the sent requests, then reply addresses are displayed with average reply time.
+When there are replies for *any* of the sent requests, then reply addresses are displayed with 
+average reply time with count of responses.
 ```
-<step>. <reply addresses> [<average time>]
-```
-
-When there are replies for *some* of the sent requests, then reply addresses are displayed with question marks indicating unknown reply time.
-```
-<step>. <reply addresses> ???
+<step>. <reply addresses> [<average time> (<responses count)]
 ```
 
 When there are no replies, then a single asterisk is displayed.

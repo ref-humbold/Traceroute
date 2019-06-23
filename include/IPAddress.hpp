@@ -1,5 +1,5 @@
-#ifndef _IP_ADDRESS_HPP_
-#define _IP_ADDRESS_HPP_
+#ifndef IP_ADDRESS_HPP_
+#define IP_ADDRESS_HPP_
 
 #include <cstdlib>
 #include <exception>
