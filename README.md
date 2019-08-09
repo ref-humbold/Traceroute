@@ -44,9 +44,9 @@ $ make
 ```
 
 ## How to run?
+**Make sure you've got ``sudo`` priviledges so as to use raw sockets! Otherwise traceroute won't work.**
+
 Traceroute can be run directly using the executable file in the `bin` root directory:
 ```sh
 $ sudo /path-to-project-directory/bin/traceroute
 ```
-
-Make sure you've got ``sudo`` priviledges so as to use raw sockets! Otherwise traceroute won't work.
