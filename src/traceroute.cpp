@@ -1,4 +1,3 @@
-#include <cstdlib>
 #include <cstring>
 #include <iostream>
 #include <algorithm>
@@ -6,13 +5,11 @@
 #include <string>
 #include <unistd.h>
 #include "ICMPController.hpp"
-#include "IPAddress.hpp"
-#include "RawSocket.hpp"
 
 void print_results(uint16_t ttl, const std::set<IPAddress> & recv_addr, size_t avg_time,
                    size_t recv_num)
 {
-    std::cout << static_cast<unsigned int>(ttl) << ". ";
+    std::cout << (ttl < 10 ? " " : "") << static_cast<unsigned int>(ttl) << ". ";
 
     if(recv_addr.empty())
         std::cout << "*\n";
@@ -21,7 +18,7 @@ void print_results(uint16_t ttl, const std::set<IPAddress> & recv_addr, size_t a
         for(auto addr : recv_addr)
             std::cout << addr << " ";
 
-        std::cout << "[" << avg_time / 1000 << " ms (" << recv_num << ")]\n";
+        std::cout << "-- " << avg_time / 1000 << " ms (" << recv_num << ")\n";
     }
 }
 
@@ -41,7 +38,7 @@ int main(int argc, char * argv[])
     uint16_t pid = getpid();
     int steps = 30;
 
-    std::cout << "traceroute :: destination " << addr << " :: max " << steps << " steps\n";
+    std::cout << "  traceroute :: destination " << addr << " :: max " << steps << " steps\n";
 
     for(int i = 1; i <= steps; ++i)
     {

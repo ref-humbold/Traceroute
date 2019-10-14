@@ -2,19 +2,16 @@
 #define IP_ADDRESS_HPP_
 
 #include <cstdlib>
-#include <exception>
+#include <cinttypes>
 #include <iostream>
-#include <stdexcept>
-#include <algorithm>
 #include <string>
-#include <tuple>
 #include <vector>
-#include <numeric>
-
-using addr_t = unsigned int;
 
 class IPAddress
 {
+private:
+    using addr_t = uint32_t;
+
 public:
     explicit IPAddress(addr_t a) : address{a}
     {
@@ -39,6 +36,8 @@ public:
     explicit operator std::string() const;
 
 private:
+    std::vector<unsigned int> quadruple() const;
+
     addr_t address;
 };
 

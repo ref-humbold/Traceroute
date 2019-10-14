@@ -5,13 +5,13 @@ Simple ICMP traceroute
 Traceroute shows a path through the Internet from your computer to a specified address. This implementation uses ICMP packages and raw sockets.
 
 ### Output format
-When there are replies for *any* of the sent requests, then reply addresses are displayed with 
+When there are replies for *any* of the requests sent, then reply addresses are displayed with 
 average reply time with count of responses.
 ```
-<step>. <reply addresses> [<average time> (<responses count)]
+<step>. <reply addresses> -- <average time> (<responses count>)
 ```
 
-When there are no replies, then a single asterisk is displayed.
+When there are no replies, then a single asterisk character is displayed.
 ```
 <step>. *
 ```
@@ -21,12 +21,12 @@ When there are no replies, then a single asterisk is displayed.
 ## Dependencies
 
 ### Standard build & run
-> *versions used by the author are in double parentheses and italic*
+> *versions last used by the author are in double parentheses and italic*
 
 Build process:
 + Linux-based operating system *((Debian testing))*
-+ C++ 14 compiler *((g++ 8.3.0))*
 + [CMake](https://cmake.org/) *((3.13.4))*
++ C++ 14 compiler *((g++ 9.2.1))*
 + [GNU Make](https://www.gnu.org/software/make) *((4.2.1))*
 
 -----

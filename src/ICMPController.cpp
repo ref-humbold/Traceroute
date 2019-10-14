@@ -1,10 +1,56 @@
 #include "ICMPController.hpp"
+#include <cerrno>
+#include <cstring>
+#include <ctime>
+#include <string>
+
+uint16_t count_checksum(const uint16_t * hdr, int length)
+{
+    if(length % 2 == 1)
+        throw SocketException("Incorrect length of ICMP header.");
+
+    uint32_t sum = 0;
+    const uint16_t * ptr = hdr;
+
+    for(int i = 0; i < length; i += 2)
+    {
+        sum += *ptr;
+        ++ptr;
+    }
+
+    sum = (sum >> 16U) + (sum & 0xFFFFU);
+
+    return (uint16_t)(~(sum + (sum >> 16U)));
+}
+
+icmphdr prepare_icmp(uint16_t id, uint16_t seq)
+{
+    icmphdr header = {};
+
+    header.type = ICMP_ECHO;
+    header.code = 0;
+    header.un.echo.id = id;
+    header.un.echo.sequence = seq;
+    header.checksum = 0;
+    header.checksum = count_checksum((uint16_t *)&header, sizeof(header));
+
+    return header;
+}
+
+std::tuple<iphdr *, icmphdr *, uint8_t *> take_headers(uint8_t * ptr)
+{
+    auto * hIP = reinterpret_cast<iphdr *>(ptr);
+    auto * hICMP = reinterpret_cast<icmphdr *>(ptr + 4U * hIP->ihl);
+    uint8_t * rest = ptr + 4U * hIP->ihl + sizeof(icmphdr);
+
+    return std::make_tuple(hIP, hICMP, rest);
+}
 
 void ICMPController::echo_request(const IPAddress & addr, uint16_t id, uint16_t ttl)
 {
     for(int i = 0; i < 3; ++i)
     {
-        icmphdr header = sender.prepare_icmp(id, 3 * ttl + i);
+        icmphdr header = prepare_icmp(id, 3 * ttl + i);
 
         sender.set_receiver(addr);
         sender.send(&header, sizeof(header), ttl);
@@ -16,7 +62,7 @@ std::tuple<std::set<IPAddress>, size_t, size_t> ICMPController::echo_reply(uint1
 {
     std::set<IPAddress> recv_addr;
     fd_set fd;
-    timeval timer;
+    timeval timer = {};
     size_t avg_time = 0;
     size_t recv_num = 0;
 
@@ -74,13 +120,4 @@ IPAddress ICMPController::recv_echo(uint16_t id, uint16_t ttl)
     }
 
     return receiver.take_address();
-}
-
-std::tuple<iphdr *, icmphdr *, uint8_t *> ICMPController::take_headers(uint8_t * ptr)
-{
-    iphdr * hIP = (iphdr *)ptr;
-    icmphdr * hICMP = (icmphdr *)(ptr + 4 * hIP->ihl);
-    uint8_t * rest = ptr + 4 * hIP->ihl + sizeof(icmphdr);
-
-    return std::make_tuple(hIP, hICMP, rest);
 }

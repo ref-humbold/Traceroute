@@ -2,19 +2,10 @@
 #define ICMP_CONTROLLER_HPP_
 
 #include <cstdlib>
-#include <cerrno>
-#include <cstring>
 #include <set>
-#include <string>
 #include <tuple>
-#include <arpa/inet.h>
-#include <netinet/ip.h>
-#include <netinet/ip_icmp.h>
-#include <sys/time.h>
 #include "ICMPReceiver.hpp"
 #include "ICMPSender.hpp"
-#include "IPAddress.hpp"
-#include "RawSocket.hpp"
 
 class ICMPController
 {
@@ -33,7 +24,6 @@ public:
 
 private:
     IPAddress recv_echo(uint16_t id, uint16_t ttl);
-    std::tuple<iphdr *, icmphdr *, uint8_t *> take_headers(uint8_t * ptr);
 };
 
 #endif

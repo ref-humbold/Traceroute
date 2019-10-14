@@ -6,8 +6,6 @@
 #include <cstring>
 #include <exception>
 #include <stdexcept>
-#include <arpa/inet.h>
-#include <netinet/ip.h>
 #include <unistd.h>
 
 class SocketException : public std::logic_error
