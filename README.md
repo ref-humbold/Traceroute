@@ -6,12 +6,12 @@ Traceroute shows a path through the Internet from your computer to a specified a
 
 ### Output format
 When there are replies for *any* of the requests sent, then reply addresses are displayed with 
-average reply time with count of responses.
+average reply time with count of responses:
 ```
 <step>. <reply addresses> -- <average time> (<responses count>)
 ```
 
-When there are no replies, then a single asterisk character is displayed.
+When there are no replies, then a single asterisk character is displayed:
 ```
 <step>. *
 ```
