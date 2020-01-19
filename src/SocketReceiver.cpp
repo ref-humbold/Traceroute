@@ -1,10 +1,10 @@
-#include "ICMPReceiver.hpp"
+#include "SocketReceiver.hpp"
 #include <cerrno>
 #include <cstring>
 #include <algorithm>
 #include <string>
 
-std::vector<uint8_t> ICMPReceiver::receive()
+std::vector<uint8_t> SocketReceiver::receive()
 {
     socklen_t sender_size = sizeof(sender_address);
     uint8_t msg_buf[IP_MAXPACKET];
@@ -18,7 +18,7 @@ std::vector<uint8_t> ICMPReceiver::receive()
     return std::vector<uint8_t>(std::begin(msg_buf), std::begin(msg_buf) + msg_size);
 }
 
-IPAddress ICMPReceiver::take_address()
+IPAddress SocketReceiver::take_address()
 {
     char ip_str[32];
 

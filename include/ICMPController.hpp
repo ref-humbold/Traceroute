@@ -4,18 +4,19 @@
 #include <cstdlib>
 #include <set>
 #include <tuple>
-#include "ICMPReceiver.hpp"
-#include "ICMPSender.hpp"
+#include "SocketReceiver.hpp"
+#include "SocketSender.hpp"
 
 class ICMPController
 {
+private:
     const RawSocket & socket;
-    ICMPSender sender;
-    ICMPReceiver receiver;
+    SocketSender sender;
+    SocketReceiver receiver;
 
 public:
     explicit ICMPController(RawSocket & s)
-        : socket{s}, sender{ICMPSender(s)}, receiver{ICMPReceiver(s)}
+        : socket{s}, sender{SocketSender(s)}, receiver{SocketReceiver(s)}
     {
     }
 

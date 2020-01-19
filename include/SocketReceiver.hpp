@@ -1,5 +1,5 @@
-#ifndef ICMP_RECEIVER_HPP_
-#define ICMP_RECEIVER_HPP_
+#ifndef SOCKET_RECEIVER_HPP_
+#define SOCKET_RECEIVER_HPP_
 
 #include <cstdlib>
 #include <vector>
@@ -8,14 +8,14 @@
 #include "IPAddress.hpp"
 #include "RawSocket.hpp"
 
-class ICMPReceiver
+class SocketReceiver
 {
 private:
     const RawSocket & socket;
     sockaddr_in sender_address;
 
 public:
-    explicit ICMPReceiver(RawSocket & s) : socket{s}, sender_address{}
+    explicit SocketReceiver(RawSocket & s) : socket{s}, sender_address{}
     {
     }
 

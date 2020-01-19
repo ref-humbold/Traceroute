@@ -1,9 +1,9 @@
-#include "ICMPSender.hpp"
+#include "SocketSender.hpp"
 #include <cerrno>
 #include <cstring>
 #include <string>
 
-void ICMPSender::send(const void * msg_buf, int msg_size, uint16_t ttl)
+void SocketSender::send(const void * msg_buf, int msg_size, uint16_t ttl)
 {
     setsockopt(socket.descriptor(), IPPROTO_IP, IP_TTL, &ttl, sizeof(uint16_t));
 
@@ -14,7 +14,7 @@ void ICMPSender::send(const void * msg_buf, int msg_size, uint16_t ttl)
         throw SocketException(strerror(errno));
 }
 
-void ICMPSender::set_receiver(const IPAddress & addr)
+void SocketSender::set_receiver(const IPAddress & addr)
 {
     receiver_address.sin_family = AF_INET;
 
