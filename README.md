@@ -5,8 +5,7 @@ Simple ICMP traceroute
 Traceroute shows a path through the Internet from your computer to a specified address. This implementation uses ICMP packages and raw sockets.
 
 ### Output format
-When there are replies for *any* of the requests sent, then reply addresses are displayed with 
-average reply time with count of responses:
+When there are replies for *any* of the requests sent, then reply addresses are displayed with average reply time with count of responses:
 ```
 <step>. <reply addresses> -- <average time> (<responses count>)
 ```
@@ -25,9 +24,12 @@ When there are no replies, then a single asterisk character is displayed:
 
 Build process:
 + Linux-based operating system *((Debian testing))*
-+ [CMake](https://cmake.org/) *((3.13.4))*
-+ C++ 14 compiler *((g++ 9.2.1))*
-+ [GNU Make](https://www.gnu.org/software/make) *((4.2.1))*
++ C++ compiler *((g++ 9.2.+))*
++ [CMake](https://cmake.org/) *((3.15.+))*
++ [GNU Make](https://www.gnu.org/software/make) *((4.2.+))*
+
+### Automated formatting
++ [Clang-format](https://releases.llvm.org/9.0.0/tools/clang/docs/ClangFormat.html) *((9.0.+))*
 
 -----
 
@@ -44,7 +46,7 @@ $ make
 ```
 
 ## How to run?
-**Make sure you've got ``sudo`` priviledges so as to use raw sockets! Otherwise traceroute won't work.**
+**Make sure you've got `sudo` privileges so as to use raw sockets! Otherwise traceroute won't work.**
 
 Traceroute can be run directly using the executable file in the `bin` root directory:
 ```sh
