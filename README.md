@@ -1,6 +1,6 @@
 # Traceroute
 ![Release](https://img.shields.io/github/v/release/ref-humbold/Traceroute?style=plastic)
-![Release](https://img.shields.io/github/v/release/ref-humbold/Traceroute?style=plastic)
+![License](https://img.shields.io/github/license/ref-humbold/Traceroute?style=plastic)
 
 Simple ICMP traceroute
 
