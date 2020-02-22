@@ -27,12 +27,16 @@ When there are no replies, then a single asterisk character is displayed:
 
 Build process:
 + Linux-based operating system *((Debian testing))*
-+ C++ compiler *((g++ 9.2.+))*
-+ [CMake](https://cmake.org/) *((3.15.+))*
-+ [GNU Make](https://www.gnu.org/software/make) *((4.2.+))*
++ C++ compiler *((g++ 9.2.+))* \
+  \[APT package `g++` or `clang`\]
++ [CMake](https://cmake.org/) *((3.15.+))* \
+  \[APT package `cmake`\]
++ [GNU Make](https://www.gnu.org/software/make) *((4.2.+))* \
+  \[APT package `make`\]
 
 ### Automated formatting
-+ [Clang-format](https://releases.llvm.org/9.0.0/tools/clang/docs/ClangFormat.html) *((9.0.+))*
++ [Clang-format](https://releases.llvm.org/9.0.0/tools/clang/docs/ClangFormat.html) *((9.0.+))*\
+  \[APT package `clang-format`\]
 
 -----
 
