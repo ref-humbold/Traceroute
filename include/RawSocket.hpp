@@ -8,9 +8,8 @@
 #include <stdexcept>
 #include <unistd.h>
 
-class SocketException : public std::logic_error
+struct SocketException : public std::logic_error
 {
-public:
     explicit SocketException(const char * s) : std::logic_error(s)
     {
     }

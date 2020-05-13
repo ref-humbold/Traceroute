@@ -9,10 +9,9 @@
 
 class IPAddress
 {
-private:
+public:
     using addr_t = uint32_t;
 
-public:
     explicit IPAddress(addr_t a) : address{a}
     {
     }

@@ -10,10 +10,6 @@
 
 class SocketReceiver
 {
-private:
-    const RawSocket & socket;
-    sockaddr_in sender_address;
-
 public:
     explicit SocketReceiver(RawSocket & s) : socket{s}, sender_address{}
     {
@@ -21,6 +17,10 @@ public:
 
     std::vector<uint8_t> receive();
     IPAddress take_address();
+
+private:
+    const RawSocket & socket;
+    sockaddr_in sender_address;
 };
 
 #endif

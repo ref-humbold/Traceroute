@@ -9,11 +9,6 @@
 
 class ICMPController
 {
-private:
-    const RawSocket & socket;
-    SocketSender sender;
-    SocketReceiver receiver;
-
 public:
     explicit ICMPController(RawSocket & s)
         : socket{s}, sender{SocketSender(s)}, receiver{SocketReceiver(s)}
@@ -25,6 +20,10 @@ public:
 
 private:
     IPAddress recv_echo(uint16_t id, uint16_t ttl);
+
+    const RawSocket & socket;
+    SocketSender sender;
+    SocketReceiver receiver;
 };
 
 #endif

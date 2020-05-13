@@ -10,10 +10,6 @@
 
 class SocketSender
 {
-private:
-    const RawSocket & socket;
-    sockaddr_in receiver_address;
-
 public:
     explicit SocketSender(RawSocket & s) : socket{s}, receiver_address{}
     {
@@ -21,6 +17,10 @@ public:
 
     void send(const void * msg_buf, int msg_size, uint16_t ttl);
     void set_receiver(const IPAddress & addr);
+
+private:
+    const RawSocket & socket;
+    sockaddr_in receiver_address;
 };
 
 #endif
