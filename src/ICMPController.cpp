@@ -20,7 +20,7 @@ uint16_t count_checksum(const uint16_t * hdr, int length)
 
     sum = (sum >> 16U) + (sum & 0xFFFFU);
 
-    return (uint16_t)(~(sum + (sum >> 16U)));
+    return static_cast<uint16_t>(~(sum + (sum >> 16U)));
 }
 
 icmphdr prepare_icmp(uint16_t id, uint16_t seq)

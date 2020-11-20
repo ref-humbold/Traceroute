@@ -7,8 +7,9 @@ void SocketSender::send(const void * msg_buf, int msg_size, uint16_t ttl)
 {
     setsockopt(socket.descriptor(), IPPROTO_IP, IP_TTL, &ttl, sizeof(uint16_t));
 
-    ssize_t sent_size = sendto(socket.descriptor(), msg_buf, msg_size, 0,
-                               (sockaddr *)&receiver_address, sizeof(receiver_address));
+    ssize_t sent_size =
+            sendto(socket.descriptor(), msg_buf, msg_size, 0,
+                   reinterpret_cast<sockaddr *>(&receiver_address), sizeof(receiver_address));
 
     if(sent_size < 0)
         throw SocketException(strerror(errno));

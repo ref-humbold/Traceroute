@@ -1,8 +1,8 @@
 #ifndef IP_ADDRESS_HPP_
 #define IP_ADDRESS_HPP_
 
-#include <cstdlib>
 #include <cinttypes>
+#include <cstdlib>
 #include <iostream>
 #include <string>
 #include <vector>

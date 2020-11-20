@@ -1,6 +1,6 @@
 #include <cstring>
-#include <iostream>
 #include <algorithm>
+#include <iostream>
 #include <set>
 #include <string>
 #include <unistd.h>
@@ -30,7 +30,6 @@ int main(int argc, char * argv[])
     if(argc < 2)
     {
         std::cerr << "No destination IP specified.";
-
         return 1;
     }
 

@@ -1,8 +1,8 @@
 #ifndef RAW_SOCKET_HPP_
 #define RAW_SOCKET_HPP_
 
-#include <cstdlib>
 #include <cerrno>
+#include <cstdlib>
 #include <cstring>
 #include <exception>
 #include <stdexcept>
@@ -18,15 +18,15 @@ struct SocketException : public std::logic_error
 class RawSocket
 {
 public:
-    explicit RawSocket(int protocol) : descr{socket(AF_INET, SOCK_RAW, protocol)}
+    explicit RawSocket(int protocol) : descriptor_{socket(AF_INET, SOCK_RAW, protocol)}
     {
-        if(descr < 0)
+        if(descriptor_ < 0)
             throw SocketException(strerror(errno));
     }
 
     ~RawSocket()
     {
-        close(descr);
+        close(descriptor_);
     }
 
     RawSocket(const RawSocket & r) = delete;
@@ -36,11 +36,11 @@ public:
 
     int descriptor() const
     {
-        return descr;
+        return descriptor_;
     }
 
 private:
-    int descr;
+    int descriptor_;
 };
 
 #endif

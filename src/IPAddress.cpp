@@ -1,8 +1,8 @@
 #include "IPAddress.hpp"
-#include <exception>
-#include <stdexcept>
 #include <algorithm>
+#include <exception>
 #include <numeric>
+#include <stdexcept>
 
 std::vector<std::string> split(const std::string & st)
 {
@@ -62,9 +62,8 @@ IPAddress::operator std::string() const
 
 std::vector<unsigned int> IPAddress::quadruple() const
 {
-    return std::vector<unsigned int>({(address & 0xFF000000U) >> 24U,
-                                      (address & 0x00FF0000U) >> 16U, (address & 0x0000FF00U) >> 8U,
-                                      address & 0x000000FFU});
+    return {(address & 0xFF000000U) >> 24U, (address & 0x00FF0000U) >> 16U,
+            (address & 0x0000FF00U) >> 8U, address & 0x000000FFU};
 }
 
 std::ostream & operator<<(std::ostream & os, const IPAddress & a)
@@ -72,6 +71,5 @@ std::ostream & operator<<(std::ostream & os, const IPAddress & a)
     std::vector<unsigned int> q = a.quadruple();
 
     os << q[0] << "." << q[1] << "." << q[2] << "." << q[3];
-
     return os;
 }

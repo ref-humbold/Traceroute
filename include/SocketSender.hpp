@@ -1,8 +1,8 @@
 #ifndef SOCKET_SENDER_HPP_
 #define SOCKET_SENDER_HPP_
 
-#include <cstdlib>
 #include <cinttypes>
+#include <cstdlib>
 #include <arpa/inet.h>
 #include <netinet/ip_icmp.h>
 #include "IPAddress.hpp"

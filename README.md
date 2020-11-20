@@ -29,15 +29,15 @@ General:
 + Linux-based operating system \
   *((Debian testing))*
 + C++ compiler \
-  *((APT package `g++`, 9.2.+))*
+  *((APT package `g++`, 10.2.+))*
 + [CMake](https://cmake.org/) \
-  *((APT package `cmake`, 3.15.+))*
+  *((APT package `cmake`, 3.18.+))*
 + [GNU Make](https://www.gnu.org/software/make) \
-  *((APT package `make`, 4.2.+))*
+  *((APT package `make`, 4.3.+))*
 
 ### Automated formatting
-+ [Clang-format](https://releases.llvm.org/9.0.0/tools/clang/docs/ClangFormat.html) \
-  *((APT package `clang-format`, 9.0.+))*
++ [Clang-format](https://releases.llvm.org/11.0.0/tools/clang/docs/ClangFormat.html) \
+  *((APT package `clang-format`, 11.+))*
 
 -----
 
