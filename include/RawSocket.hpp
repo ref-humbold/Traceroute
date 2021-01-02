@@ -29,10 +29,10 @@ public:
         close(descriptor_);
     }
 
-    RawSocket(const RawSocket & r) = delete;
-    RawSocket(RawSocket && r) = default;
-    RawSocket & operator=(const RawSocket & r) = delete;
-    RawSocket & operator=(RawSocket && r) = default;
+    RawSocket(const RawSocket &) = delete;
+    RawSocket(RawSocket &&) = default;
+    RawSocket & operator=(const RawSocket &) = delete;
+    RawSocket & operator=(RawSocket &&) = default;
 
     int descriptor() const
     {

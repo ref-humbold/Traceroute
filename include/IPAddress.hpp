@@ -12,16 +12,16 @@ class IPAddress
 public:
     using addr_t = uint32_t;
 
-    explicit IPAddress(addr_t a) : address{a}
+    explicit IPAddress(addr_t address) : address{address}
     {
     }
 
-    explicit IPAddress(const std::string & st);
+    explicit IPAddress(const std::string & str);
 
-    IPAddress(const IPAddress & a) = default;
-    IPAddress(IPAddress && a) = default;
-    IPAddress & operator=(const IPAddress & a) = default;
-    IPAddress & operator=(IPAddress && a) = default;
+    IPAddress(const IPAddress &) = default;
+    IPAddress(IPAddress &&) = default;
+    IPAddress & operator=(const IPAddress &) = default;
+    IPAddress & operator=(IPAddress &&) = default;
 
     friend bool operator==(const IPAddress & a1, const IPAddress & a2);
     friend bool operator<(const IPAddress & a1, const IPAddress & a2);
@@ -35,7 +35,7 @@ public:
     explicit operator std::string() const;
 
 private:
-    std::vector<unsigned int> quadruple() const;
+    std::vector<addr_t> quadruple() const;
 
     addr_t address;
 };
