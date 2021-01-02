@@ -36,7 +36,7 @@ public:
     const uint16_t attempts = 3;
 
 private:
-    IPAddress recv_echo(uint16_t id, uint16_t ttl);
+    IPAddress receive_echo(uint16_t id, uint16_t ttl);
 
     const RawSocket & socket;
     SocketSender sender;
