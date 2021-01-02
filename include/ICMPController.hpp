@@ -4,7 +4,6 @@
 #include <cstdlib>
 #include <iostream>
 #include <set>
-#include <tuple>
 #include "SocketReceiver.hpp"
 #include "SocketSender.hpp"
 
@@ -30,7 +29,7 @@ public:
     {
     }
 
-    void echo_request(const IPAddress & addr, uint16_t id, uint16_t ttl);
+    void echo_request(const IPAddress & address, uint16_t id, uint16_t ttl);
     EchoReply echo_reply(uint16_t id, uint16_t ttl);
 
     const uint16_t attempts = 3;

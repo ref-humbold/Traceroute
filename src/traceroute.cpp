@@ -13,7 +13,7 @@ int main(int argc, char * argv[])
 
     if(argc < 2)
     {
-        std::cerr << "No destination IP specified.";
+        std::cerr << "No destination IP specified";
         return 1;
     }
 

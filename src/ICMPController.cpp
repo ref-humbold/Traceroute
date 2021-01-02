@@ -3,6 +3,7 @@
 #include <cstring>
 #include <ctime>
 #include <string>
+#include <tuple>
 
 uint16_t count_checksum(const uint16_t * hdr, size_t length)
 {
@@ -59,13 +60,13 @@ std::ostream & operator<<(std::ostream & os, const EchoReply & reply)
     return os;
 }
 
-void ICMPController::echo_request(const IPAddress & addr, uint16_t id, uint16_t ttl)
+void ICMPController::echo_request(const IPAddress & address, uint16_t id, uint16_t ttl)
 {
     for(uint16_t i = 0; i < attempts; ++i)
     {
         icmphdr header = prepare_icmp(id, attempts * ttl + i);
 
-        sender.address(addr).ttl(ttl).send(&header, sizeof(header));
+        sender.address(address).ttl(ttl).send(&header, sizeof(header));
     }
 }
 
