@@ -2,10 +2,25 @@
 #define ICMP_CONTROLLER_HPP_
 
 #include <cstdlib>
+#include <iostream>
 #include <set>
 #include <tuple>
 #include "SocketReceiver.hpp"
 #include "SocketSender.hpp"
+
+struct EchoReply
+{
+    EchoReply(const std::set<IPAddress> & addresses, size_t average_time, size_t received_count)
+        : addresses{addresses}, average_time{average_time}, received_count{received_count}
+    {
+    }
+
+    std::set<IPAddress> addresses;
+    size_t average_time;
+    size_t received_count;
+};
+
+std::ostream & operator<<(std::ostream & os, const EchoReply & reply);
 
 class ICMPController
 {
@@ -16,7 +31,9 @@ public:
     }
 
     void echo_request(const IPAddress & addr, uint16_t id, uint16_t ttl);
-    std::tuple<std::set<IPAddress>, size_t, size_t> echo_reply(uint16_t id, uint16_t ttl);
+    EchoReply echo_reply(uint16_t id, uint16_t ttl);
+
+    const uint16_t attempts = 3;
 
 private:
     IPAddress recv_echo(uint16_t id, uint16_t ttl);

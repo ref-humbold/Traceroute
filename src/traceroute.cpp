@@ -6,20 +6,9 @@
 #include <unistd.h>
 #include "ICMPController.hpp"
 
-void print_results(uint16_t ttl, const std::set<IPAddress> & recv_addr, size_t avg_time,
-                   size_t recv_num)
+void print_results(uint16_t ttl, const EchoReply & reply)
 {
-    std::cout << (ttl < 10 ? " " : "") << static_cast<unsigned int>(ttl) << ". ";
-
-    if(recv_addr.empty())
-        std::cout << "*\n";
-    else
-    {
-        for(auto addr : recv_addr)
-            std::cout << addr << " ";
-
-        std::cout << "-- " << avg_time / 1000 << " ms (" << recv_num << ")\n";
-    }
+    std::cout << (ttl < 10 ? " " : "") << static_cast<size_t>(ttl) << ". " << reply << "\n";
 }
 
 int main(int argc, char * argv[])
@@ -41,14 +30,13 @@ int main(int argc, char * argv[])
 
     for(int i = 1; i <= steps; ++i)
     {
-        std::set<IPAddress> recv_addr;
-        size_t avg_time, recv_num;
-
         socket_ctrl.echo_request(addr, pid, i);
-        std::tie(recv_addr, avg_time, recv_num) = socket_ctrl.echo_reply(pid, i);
-        print_results(i, recv_addr, avg_time, recv_num);
 
-        if(std::any_of(recv_addr.begin(), recv_addr.end(),
+        EchoReply reply = socket_ctrl.echo_reply(pid, i);
+
+        print_results(i, reply);
+
+        if(std::any_of(reply.addresses.begin(), reply.addresses.end(),
                        [addr](const IPAddress & a) { return a == addr; }))
             break;
     }
