@@ -65,8 +65,7 @@ void ICMPController::echo_request(const IPAddress & addr, uint16_t id, uint16_t 
     {
         icmphdr header = prepare_icmp(id, attempts * ttl + i);
 
-        sender.set_receiver(addr);
-        sender.send(&header, sizeof(header), ttl);
+        sender.address(addr).ttl(ttl).send(&header, sizeof(header));
     }
 }
 

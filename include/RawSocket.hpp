@@ -6,11 +6,16 @@
 #include <cstring>
 #include <exception>
 #include <stdexcept>
+#include <string>
 #include <unistd.h>
 
 struct SocketException : public std::logic_error
 {
     explicit SocketException(const char * s) : std::logic_error(s)
+    {
+    }
+
+    explicit SocketException(const std::string & s) : std::logic_error(s)
     {
     }
 };

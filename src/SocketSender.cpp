@@ -3,24 +3,26 @@
 #include <cstring>
 #include <string>
 
-void SocketSender::send(const void * msg_buf, int msg_size, uint16_t ttl)
+void SocketSender::send(const void * message_buffer, int message_size)
 {
-    setsockopt(socket.descriptor(), IPPROTO_IP, IP_TTL, &ttl, sizeof(uint16_t));
+    setsockopt(socket.descriptor(), IPPROTO_IP, IP_TTL, &ttl_, sizeof(uint16_t));
 
-    ssize_t sent_size =
-            sendto(socket.descriptor(), msg_buf, msg_size, 0,
-                   reinterpret_cast<sockaddr *>(&receiver_address), sizeof(receiver_address));
+    ssize_t sent_size = sendto(socket.descriptor(), message_buffer, message_size, 0,
+                               reinterpret_cast<sockaddr *>(&address_), sizeof(address_));
 
     if(sent_size < 0)
         throw SocketException(strerror(errno));
 }
 
-void SocketSender::set_receiver(const IPAddress & addr)
+SocketSender & SocketSender::address(const IPAddress & addr)
 {
-    receiver_address.sin_family = AF_INET;
+    address_.sin_family = AF_INET;
 
-    int result = inet_pton(AF_INET, std::string(addr).c_str(), &receiver_address.sin_addr);
+    std::string address_str = std::string(addr);
+    int result = inet_pton(AF_INET, address_str.c_str(), &address_.sin_addr);
 
     if(result < 1)
-        throw SocketException("Invalid addressing.");
+        throw SocketException("Invalid address " + address_str);
+
+    return *this;
 }
