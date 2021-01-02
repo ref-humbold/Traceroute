@@ -6,11 +6,6 @@
 #include <unistd.h>
 #include "ICMPController.hpp"
 
-void print_results(uint16_t ttl, const EchoReply & reply)
-{
-    std::cout << (ttl < 10 ? " " : "") << static_cast<size_t>(ttl) << ". " << reply << "\n";
-}
-
 int main(int argc, char * argv[])
 {
     RawSocket socket = RawSocket(IPPROTO_ICMP);
@@ -22,22 +17,22 @@ int main(int argc, char * argv[])
         return 1;
     }
 
-    IPAddress addr(argv[1]);
+    IPAddress address(argv[1]);
     uint16_t pid = getpid();
-    int steps = 30;
+    size_t steps = 30;
 
-    std::cout << "  traceroute :: destination " << addr << " :: max " << steps << " steps\n";
+    std::cout << "  traceroute :: destination " << address << " :: max " << steps << " steps\n";
 
-    for(int i = 1; i <= steps; ++i)
+    for(size_t i = 1; i <= steps; ++i)
     {
-        socket_ctrl.echo_request(addr, pid, i);
+        socket_ctrl.echo_request(address, pid, i);
 
         EchoReply reply = socket_ctrl.echo_reply(pid, i);
 
-        print_results(i, reply);
+        std::cout << (i < 10 ? " " : "") << i << ". " << reply << "\n";
 
         if(std::any_of(reply.addresses.begin(), reply.addresses.end(),
-                       [addr](const IPAddress & a) { return a == addr; }))
+                       [&](const IPAddress & a) { return a == address; }))
             break;
     }
 
