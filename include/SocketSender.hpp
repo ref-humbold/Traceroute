@@ -11,16 +11,23 @@
 class SocketSender
 {
 public:
-    explicit SocketSender(RawSocket & s) : socket{s}, receiver_address{}
+    explicit SocketSender(const RawSocket & s) : socket{s}, address_{}, ttl_{0}
     {
     }
 
-    void send(const void * msg_buf, int msg_size, uint16_t ttl);
-    void set_receiver(const IPAddress & addr);
+    void send(const void * message_buffer, int message_size);
+    SocketSender & address(const IPAddress & addr);
+
+    SocketSender & ttl(uint16_t value)
+    {
+        ttl_ = value;
+        return *this;
+    }
 
 private:
     const RawSocket & socket;
-    sockaddr_in receiver_address;
+    sockaddr_in address_;
+    uint16_t ttl_;
 };
 
 #endif

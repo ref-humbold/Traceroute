@@ -4,25 +4,25 @@
 #include <algorithm>
 #include <string>
 
-std::vector<uint8_t> SocketReceiver::receive()
+SocketReceiver::Message SocketReceiver::receive()
 {
-    socklen_t sender_size = sizeof(sender_address);
-    uint8_t msg_buf[IP_MAXPACKET];
+    sockaddr_in address = {};
+    socklen_t address_size = sizeof(address);
+    uint8_t message_buffer[IP_MAXPACKET];
+    ssize_t message_size = recvfrom(socket.descriptor(), message_buffer, IP_MAXPACKET, MSG_DONTWAIT,
+                                    reinterpret_cast<sockaddr *>(&address), &address_size);
 
-    ssize_t msg_size = recvfrom(socket.descriptor(), msg_buf, IP_MAXPACKET, MSG_DONTWAIT,
-                                reinterpret_cast<sockaddr *>(&sender_address), &sender_size);
-
-    if(msg_size < 0)
+    if(message_size < 0)
         throw SocketException(strerror(errno));
 
-    return std::vector<uint8_t>(std::begin(msg_buf), std::begin(msg_buf) + msg_size);
+    return Message(address, std::vector<uint8_t>(std::begin(message_buffer),
+                                                 std::begin(message_buffer) + message_size));
 }
 
-IPAddress SocketReceiver::take_address()
+IPAddress SocketReceiver::Message::address()
 {
     char ip_str[32];
-
-    const char * result = inet_ntop(AF_INET, &(sender_address.sin_addr), ip_str, sizeof(ip_str));
+    const char * result = inet_ntop(AF_INET, &(address_.sin_addr), ip_str, sizeof(ip_str));
 
     if(result == nullptr)
         throw SocketException(strerror(errno));

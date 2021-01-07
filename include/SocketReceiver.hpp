@@ -11,16 +11,36 @@
 class SocketReceiver
 {
 public:
-    explicit SocketReceiver(RawSocket & s) : socket{s}, sender_address{}
+    class Message;
+
+    explicit SocketReceiver(const RawSocket & s) : socket{s}
     {
     }
 
-    std::vector<uint8_t> receive();
-    IPAddress take_address();
+    Message receive();
 
 private:
     const RawSocket & socket;
-    sockaddr_in sender_address;
+};
+
+class SocketReceiver::Message
+{
+public:
+    Message(const sockaddr_in & address, const std::vector<uint8_t> & message)
+        : address_{address}, message_{message}
+    {
+    }
+
+    IPAddress address();
+
+    const std::vector<uint8_t> & message()
+    {
+        return message_;
+    }
+
+private:
+    sockaddr_in address_;
+    std::vector<uint8_t> message_;
 };
 
 #endif

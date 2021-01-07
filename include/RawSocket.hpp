@@ -6,11 +6,16 @@
 #include <cstring>
 #include <exception>
 #include <stdexcept>
+#include <string>
 #include <unistd.h>
 
 struct SocketException : public std::logic_error
 {
     explicit SocketException(const char * s) : std::logic_error(s)
+    {
+    }
+
+    explicit SocketException(const std::string & s) : std::logic_error(s)
     {
     }
 };
@@ -29,10 +34,10 @@ public:
         close(descriptor_);
     }
 
-    RawSocket(const RawSocket & r) = delete;
-    RawSocket(RawSocket && r) = default;
-    RawSocket & operator=(const RawSocket & r) = delete;
-    RawSocket & operator=(RawSocket && r) = default;
+    RawSocket(const RawSocket &) = delete;
+    RawSocket(RawSocket &&) = default;
+    RawSocket & operator=(const RawSocket &) = delete;
+    RawSocket & operator=(RawSocket &&) = default;
 
     int descriptor() const
     {
