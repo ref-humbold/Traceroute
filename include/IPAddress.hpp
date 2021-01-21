@@ -71,9 +71,9 @@ inline bool operator>=(const IPAddress & a1, const IPAddress & a2)
     return !(a1 < a2);
 }
 
-std::ostream & operator<<(std::ostream & os, const IPAddress & addr)
+inline std::ostream & operator<<(std::ostream & os, const IPAddress & addr)
 {
-    std::vector<IPAddress::addr_t> q = a.quadruple();
+    std::vector<IPAddress::addr_t> q = addr.quadruple();
 
     os << q[0] << "." << q[1] << "." << q[2] << "." << q[3];
     return os;
