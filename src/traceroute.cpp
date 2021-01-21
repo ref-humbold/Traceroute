@@ -31,8 +31,7 @@ int main(int argc, char * argv[])
 
         std::cout << (i < 10 ? " " : "") << i << ". " << reply << "\n";
 
-        if(std::any_of(reply.addresses.begin(), reply.addresses.end(),
-                       [&](const IPAddress & a) { return a == address; }))
+        if(reply.address_times.find(address) != reply.address_times.end())
             break;
     }
 

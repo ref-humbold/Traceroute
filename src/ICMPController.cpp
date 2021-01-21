@@ -7,14 +7,28 @@
 
 std::ostream & operator<<(std::ostream & os, const EchoReply & reply)
 {
-    if(reply.addresses.empty())
+    if(reply.address_times.empty())
         os << "*";
     else
     {
-        for(auto addr : reply.addresses)
-            os << addr << " ";
+        std::string address_separator = "";
 
-        os << "-- " << reply.average_time / 1000 << " ms (" << reply.received_count << ")";
+        for(auto && addr_time : reply.address_times)
+        {
+            std::string time_separator = "";
+
+            os << address_separator << addr_time.first << " -- ";
+
+            for(auto && resp_time : addr_time.second)
+            {
+                os << time_separator << resp_time << " ms";
+                time_separator = ", ";
+            }
+
+            address_separator = " / ";
+        }
+
+        os << " (avg " << reply.average_time << " ms)";
     }
 
     return os;
@@ -32,11 +46,9 @@ void ICMPController::echo_request(const IPAddress & address, uint16_t id, uint16
 
 EchoReply ICMPController::echo_reply(uint16_t id, uint16_t ttl)
 {
-    std::set<IPAddress> received_addresses;
+    EchoReply reply;
     fd_set fd;
     timeval timer = {.tv_sec = 1, .tv_usec = 0};
-    size_t average_time = 0;
-    size_t received_count = 0;
 
     FD_ZERO(&fd);
     FD_SET(socket.descriptor(), &fd);
@@ -56,14 +68,10 @@ EchoReply ICMPController::echo_reply(uint16_t id, uint16_t ttl)
         if(address == IPAddress(0))
             continue;
 
-        size_t response_time = 1000000 - timer.tv_usec;
+        reply.add(address, (1000000 - timer.tv_usec) / 1000);
+    } while(reply.received_count < attempts);
 
-        received_addresses.insert(address);
-        average_time = (average_time + response_time) / 2;
-        ++received_count;
-    } while(received_count < 3);
-
-    return EchoReply(received_addresses, average_time, received_count);
+    return reply;
 }
 
 uint16_t ICMPController::count_checksum(const uint16_t * header, size_t length)

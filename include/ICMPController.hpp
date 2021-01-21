@@ -3,19 +3,27 @@
 
 #include <cstdlib>
 #include <iostream>
-#include <set>
+#include <map>
+#include <vector>
 #include "SocketReceiver.hpp"
 #include "SocketSender.hpp"
 
 struct EchoReply
 {
-    EchoReply(const std::set<IPAddress> & addresses, size_t average_time, size_t received_count)
-        : addresses{addresses}, average_time{average_time}, received_count{received_count}
+    EchoReply() : average_time{0.0}, received_count{0}
     {
     }
 
-    std::set<IPAddress> addresses;
-    size_t average_time;
+    void add(IPAddress addr, size_t time_ms)
+    {
+        address_times.emplace(addr, std::vector<size_t>());
+        address_times[addr].push_back(time_ms);
+        ++received_count;
+        average_time += (time_ms - average_time) / received_count;
+    }
+
+    std::map<IPAddress, std::vector<size_t>> address_times;
+    double average_time;
     size_t received_count;
 };
 
