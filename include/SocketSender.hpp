@@ -15,7 +15,7 @@ public:
     {
     }
 
-    void send(const void * message_buffer, int message_size);
+    void send(const void * message_buffer, int message_size) const;
     SocketSender & address(const IPAddress & addr);
 
     SocketSender & ttl(uint16_t value)

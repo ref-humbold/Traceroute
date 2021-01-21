@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <string>
 
-SocketReceiver::Message SocketReceiver::receive()
+SocketReceiver::Message SocketReceiver::receive() const
 {
     sockaddr_in address = {};
     socklen_t address_size = sizeof(address);
@@ -19,7 +19,7 @@ SocketReceiver::Message SocketReceiver::receive()
                                                  std::begin(message_buffer) + message_size));
 }
 
-IPAddress SocketReceiver::Message::address()
+IPAddress SocketReceiver::Message::address() const
 {
     char ip_str[32];
     const char * result = inet_ntop(AF_INET, &(address_.sin_addr), ip_str, sizeof(ip_str));

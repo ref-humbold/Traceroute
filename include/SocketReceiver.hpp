@@ -17,7 +17,7 @@ public:
     {
     }
 
-    Message receive();
+    Message receive() const;
 
 private:
     const RawSocket & socket;
@@ -31,9 +31,9 @@ public:
     {
     }
 
-    IPAddress address();
+    IPAddress address() const;
 
-    const std::vector<uint8_t> & message()
+    const std::vector<uint8_t> & message() const
     {
         return message_;
     }

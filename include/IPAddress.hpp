@@ -36,6 +36,7 @@ public:
 
 private:
     std::vector<addr_t> quadruple() const;
+    std::vector<std::string> split(const std::string & str) const;
 
     addr_t address;
 };
@@ -70,6 +71,12 @@ inline bool operator>=(const IPAddress & a1, const IPAddress & a2)
     return !(a1 < a2);
 }
 
-std::ostream & operator<<(std::ostream & os, const IPAddress & addr);
+std::ostream & operator<<(std::ostream & os, const IPAddress & addr)
+{
+    std::vector<IPAddress::addr_t> q = a.quadruple();
+
+    os << q[0] << "." << q[1] << "." << q[2] << "." << q[3];
+    return os;
+}
 
 #endif

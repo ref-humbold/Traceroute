@@ -4,30 +4,6 @@
 #include <numeric>
 #include <stdexcept>
 
-std::vector<std::string> split(const std::string & str)
-{
-    std::vector<std::string> split_str;
-    size_t begin_pos = 0;
-
-    while(begin_pos != std::string::npos)
-    {
-        size_t end_pos = str.find('.', begin_pos);
-
-        if(end_pos != std::string::npos)
-        {
-            split_str.push_back(str.substr(begin_pos, end_pos - begin_pos));
-            begin_pos = end_pos + 1;
-        }
-        else
-        {
-            split_str.push_back(str.substr(begin_pos));
-            begin_pos = end_pos;
-        }
-    }
-
-    return split_str;
-}
-
 IPAddress::IPAddress(const std::string & str)
 {
     std::vector<std::string> split_str = split(str);
@@ -41,8 +17,7 @@ IPAddress::IPAddress(const std::string & str)
        }))
         throw std::invalid_argument("Parameter is not a valid IP address");
 
-    addr_bytes.resize(split_str.size());
-    std::transform(split_str.begin(), split_str.end(), addr_bytes.begin(),
+    std::transform(split_str.begin(), split_str.end(), std::back_inserter(addr_bytes),
                    [](const std::string & s) { return stoul(s); });
 
     if(std::any_of(addr_bytes.begin(), addr_bytes.end(), [](addr_t p) { return p > 255; }))
@@ -66,10 +41,26 @@ std::vector<IPAddress::addr_t> IPAddress::quadruple() const
             (address & 0x0000FF00U) >> 8U, address & 0x000000FFU};
 }
 
-std::ostream & operator<<(std::ostream & os, const IPAddress & a)
+std::vector<std::string> IPAddress::split(const std::string & str) const
 {
-    std::vector<IPAddress::addr_t> q = a.quadruple();
+    std::vector<std::string> split_str;
+    size_t begin_pos = 0;
 
-    os << q[0] << "." << q[1] << "." << q[2] << "." << q[3];
-    return os;
+    while(begin_pos != std::string::npos)
+    {
+        size_t end_pos = str.find('.', begin_pos);
+
+        if(end_pos != std::string::npos)
+        {
+            split_str.push_back(str.substr(begin_pos, end_pos - begin_pos));
+            begin_pos = end_pos + 1;
+        }
+        else
+        {
+            split_str.push_back(str.substr(begin_pos));
+            begin_pos = end_pos;
+        }
+    }
+
+    return split_str;
 }
