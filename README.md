@@ -8,7 +8,7 @@ Simple ICMP traceroute
 Traceroute shows a path through the Internet from your computer to a specified address. This implementation uses ICMP packages and raw sockets.
 
 ### Output format
-When there are replies for *any* of the requests sent, then reply addresses are displayed with average reply time with count of responses:
+When there are replies for *any* of the requests sent, then reply addresses are displayed with average reply time and count of responses:
 ```
 <step>. <reply addresses> -- <average time> (<responses count>)
 ```
@@ -54,7 +54,7 @@ $ make
 ```
 
 ## How to run?
-**Make sure you've got `sudo` privileges so as to use raw sockets! Otherwise traceroute won't work.**
+> **Make sure you've got `sudo` privileges, so as to use raw sockets! Otherwise the traceroute won't work.**
 
 Traceroute can be run directly using the executable file in the `bin` root directory:
 ```sh
