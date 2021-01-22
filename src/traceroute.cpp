@@ -17,21 +17,21 @@ int main(int argc, char * argv[])
         return 1;
     }
 
-    IPAddress address(argv[1]);
+    IPAddress destination(argv[1]);
     uint16_t pid = getpid();
-    size_t steps = 30;
+    size_t steps = 32;
 
-    std::cout << "  traceroute :: destination " << address << " :: max " << steps << " steps\n";
+    std::cout << "  traceroute :: destination " << destination << " :: max " << steps << " steps\n";
 
     for(size_t i = 1; i <= steps; ++i)
     {
-        socket_ctrl.echo_request(address, pid, i);
+        socket_ctrl.echo_request(destination, pid, i);
 
         EchoReply reply = socket_ctrl.echo_reply(pid, i);
 
         std::cout << (i < 10 ? " " : "") << i << ". " << reply << "\n";
 
-        if(reply.address_times.find(address) != reply.address_times.end())
+        if(reply.address_times.find(destination) != reply.address_times.end())
             break;
     }
 

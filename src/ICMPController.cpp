@@ -38,9 +38,9 @@ void ICMPController::echo_request(const IPAddress & address, uint16_t id, uint16
 {
     for(uint16_t i = 0; i < attempts; ++i)
     {
-        icmphdr header = prepare_icmp(id, attempts * ttl + i);
+        icmphdr icmp_header = prepare_icmp(id, attempts * ttl + i);
 
-        sender.address(address).ttl(ttl).send(&header, sizeof(header));
+        sender.address(address).ttl(ttl).send(&icmp_header, sizeof(icmp_header));
     }
 }
 
@@ -95,7 +95,6 @@ uint16_t ICMPController::count_checksum(const uint16_t * header, size_t length)
 icmphdr ICMPController::prepare_icmp(uint16_t id, uint16_t seq)
 {
     icmphdr header = {};
-
     header.type = ICMP_ECHO;
     header.code = 0;
     header.un.echo.id = id;

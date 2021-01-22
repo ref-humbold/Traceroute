@@ -32,7 +32,7 @@ std::ostream & operator<<(std::ostream & os, const EchoReply & reply);
 class ICMPController
 {
 public:
-    explicit ICMPController(RawSocket & s)
+    explicit ICMPController(const RawSocket & s)
         : socket{s}, sender{SocketSender(s)}, receiver{SocketReceiver(s)}
     {
     }

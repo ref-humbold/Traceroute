@@ -5,7 +5,7 @@
 Simple ICMP traceroute
 
 ## About
-Traceroute shows a path through the Internet from your computer to a specified address. This implementation uses ICMP packages and raw sockets.
+Traceroute shows a path through the Internet from your computer to a specified address. This implementation uses ICMP packages and raw sockets. Paths up to 32 steps are recognized.
 
 ### Output format
 When there are replies for *any* of the requests sent, then reply addresses are displayed with their reply times and average reply time at the end:
