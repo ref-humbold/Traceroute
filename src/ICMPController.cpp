@@ -5,6 +5,8 @@
 #include <string>
 #include <tuple>
 
+#pragma region EchoReply
+
 std::ostream & operator<<(std::ostream & os, const EchoReply & reply)
 {
     if(reply.address_times.empty())
@@ -33,6 +35,9 @@ std::ostream & operator<<(std::ostream & os, const EchoReply & reply)
 
     return os;
 }
+
+#pragma endregion
+#pragma region ICMPController
 
 void ICMPController::echo_request(const IPAddress & address, uint16_t id, uint16_t ttl)
 {
@@ -141,3 +146,5 @@ IPAddress ICMPController::receive_echo(uint16_t id, uint16_t ttl)
 
     return message.address();
 }
+
+#pragma endregion

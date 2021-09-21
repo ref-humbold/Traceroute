@@ -8,6 +8,8 @@
 #include "SocketReceiver.hpp"
 #include "SocketSender.hpp"
 
+#pragma region EchoReply
+
 struct EchoReply
 {
     EchoReply() : average_time{0.0}, received_count{0}
@@ -28,6 +30,9 @@ struct EchoReply
 };
 
 std::ostream & operator<<(std::ostream & os, const EchoReply & reply);
+
+#pragma endregion
+#pragma region ICMPController
 
 class ICMPController
 {
@@ -54,4 +59,5 @@ private:
     SocketReceiver receiver;
 };
 
+#pragma endregion
 #endif

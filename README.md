@@ -10,7 +10,7 @@ Traceroute shows a path through the Internet from your computer to a specified a
 ### Output format
 When there are replies for *any* of the requests sent, then reply addresses are displayed with their reply times and average reply time at the end:
 ```
-<step>. <reply address> -- <reply times> [/ <reply address> -- <reply times>...] (<average reply time>)
+<step>. <reply address> -- <reply times> [/ <reply address> -- <reply times>...] (avg <average reply time>)
 ```
 
 When there are no replies, then a single asterisk character is displayed:
@@ -29,7 +29,7 @@ General:
 + Linux-based operating system \
   *((Debian testing))*
 + C++ compiler \
-  *((APT package `g++`, 10.2.+))*
+  *((APT package `g++`, 10.3.+))*
 + [CMake](https://cmake.org/) \
   *((APT package `cmake`, 3.18.+))*
 + [GNU Make](https://www.gnu.org/software/make) \
@@ -54,9 +54,11 @@ $ make
 ```
 
 ## How to run?
-> **Make sure you've got `sudo` privileges, so as to use raw sockets! Otherwise the traceroute won't work.**
+> **Make sure you've got `sudo` privileges, so as to use raw sockets! Otherwise traceroute won't work.**
 
 Traceroute can be run directly using the executable file in the `bin` root directory:
 ```sh
-$ sudo /path-to-project-directory/bin/traceroute
+$ sudo /path-to-project-directory/bin/traceroute ADDRESS
 ```
+
+*ADDRESS* - IPv4 address of the destination
