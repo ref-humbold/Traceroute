@@ -29,15 +29,15 @@ General:
 + Linux-based operating system \
   *((Debian testing))*
 + C++ compiler \
-  *((APT package `g++`, 10.3.+))*
+  *((APT package `g++`, 12.2.+))*
 + [CMake](https://cmake.org/) \
-  *((APT package `cmake`, 3.18.+))*
+  *((APT package `cmake`, 3.25.+))*
 + [GNU Make](https://www.gnu.org/software/make) \
   *((APT package `make`, 4.3.+))*
 
 ### Automated formatting
-+ [Clang-format](https://releases.llvm.org/11.0.0/tools/clang/docs/ClangFormat.html) \
-  *((APT package `clang-format`, 11.+))*
++ [Clang-format](https://releases.llvm.org/14.0.0/tools/clang/docs/ClangFormat.html) \
+  *((APT package `clang-format`, 14.+))*
 
 -----
 
@@ -46,7 +46,7 @@ Traceroute can be built using **CMake** that generates **GNU Make** Makefile.
 
 Follow these steps to build:
 ```sh
-$ cd /path-to-project-directory/
+$ cd /path/to/project/directory/
 $ mkdir build
 $ cd build
 $ cmake ..
@@ -54,11 +54,11 @@ $ make
 ```
 
 ## How to run?
-> **Make sure you've got `sudo` privileges, so as to use raw sockets! Otherwise traceroute won't work.**
+> **Make sure you've got `sudo` privileges, so as to use raw sockets! Otherwise traceroute app won't work.**
 
-Traceroute can be run directly using the executable file in the `bin` root directory:
+Traceroute can be run directly using the executable file in the `buildOut/bin` root directory:
 ```sh
-$ sudo /path-to-project-directory/bin/traceroute ADDRESS
+$ sudo /path-to-project-directory/buildOut/bin/traceroute ADDRESS
 ```
 
-*ADDRESS* - IPv4 address of the destination
+ADDRESS - IPv4 address of the destination
