@@ -2,9 +2,9 @@ cmake_minimum_required(VERSION 3.10)
 
 # SOURCES
 set(SOURCES
+    "AppParameters.cpp"
     "IPv4Address.cpp"
     "ICMPController.cpp"
-    "Parameters.cpp"
     "SocketReceiver.cpp"
     "SocketSender.cpp"
     "traceroute.cpp")

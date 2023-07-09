@@ -4,14 +4,15 @@
 #include <set>
 #include <string>
 #include <unistd.h>
+#include "AppParameters.hpp"
 #include "ICMPController.hpp"
-#include "Parameters.hpp"
 
 int main(int argc, char * argv[])
+try
 {
     RawSocket socket = RawSocket(IPPROTO_ICMP);
     ICMPController socket_ctrl = ICMPController(socket);
-    Parameters parameters = ParametersParser().parse(argc, argv);
+    AppParameters parameters = parse_args(argc, argv);
 
     IPv4Address destination(parameters.address);
     uint16_t pid = getpid();
@@ -32,4 +33,9 @@ int main(int argc, char * argv[])
     }
 
     return 0;
+}
+catch(const std::exception & ex)
+{
+    std::cerr << "ERROR: " << ex.what() << "\n";
+    return 1;
 }

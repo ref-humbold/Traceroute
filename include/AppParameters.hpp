@@ -16,34 +16,20 @@ struct ParametersException : public std::runtime_error
     }
 };
 
-#pragma region Parameters
-
-struct Parameters
+class AppParameters
 {
 public:
-    Parameters() : address{""}, steps{32}
+    AppParameters() : address{""}, steps{default_steps}
     {
     }
 
     std::string address;
     size_t steps;
-};
-
-#pragma endregion
-#pragma region ParametersParser
-
-class ParametersParser
-{
-public:
-    ParametersParser()
-    {
-    }
-
-    const Parameters & parse(int argc, char * argv[]);
 
 private:
-    Parameters parameters_;
+    static constexpr size_t default_steps = 32;
 };
 
-#pragma endregion
+AppParameters parse_args(int argc, char * argv[]);
+
 #endif
