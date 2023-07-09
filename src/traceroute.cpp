@@ -5,25 +5,21 @@
 #include <string>
 #include <unistd.h>
 #include "ICMPController.hpp"
+#include "Parameters.hpp"
 
 int main(int argc, char * argv[])
 {
     RawSocket socket = RawSocket(IPPROTO_ICMP);
     ICMPController socket_ctrl = ICMPController(socket);
+    Parameters parameters = ParametersParser().parse(argc, argv);
 
-    if(argc < 2)
-    {
-        std::cerr << "No destination IP specified";
-        return 1;
-    }
-
-    IPv4Address destination(argv[1]);
+    IPv4Address destination(parameters.address);
     uint16_t pid = getpid();
-    size_t steps = 32;
 
-    std::cout << "  traceroute :: destination " << destination << " :: max " << steps << " steps\n";
+    std::cout << "  traceroute :: destination " << destination << " :: max " << parameters.steps
+              << " steps\n";
 
-    for(size_t i = 1; i <= steps; ++i)
+    for(size_t i = 1; i <= parameters.steps; ++i)
     {
         socket_ctrl.echo_request(destination, pid, i);
 
