@@ -5,7 +5,7 @@
 #include <vector>
 #include <arpa/inet.h>
 #include <netinet/ip_icmp.h>
-#include "IPAddress.hpp"
+#include "IPv4Address.hpp"
 #include "RawSocket.hpp"
 
 class SocketReceiver
@@ -31,7 +31,7 @@ public:
     {
     }
 
-    IPAddress address() const;
+    IPv4Address address() const;
 
     const std::vector<uint8_t> & message() const
     {

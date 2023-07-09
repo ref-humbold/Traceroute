@@ -7,39 +7,47 @@
 
 #pragma region EchoReply
 
+void EchoReply::add(IPv4Address addr, size_t time_ms)
+{
+    address_times.emplace(addr, std::vector<size_t>());
+    address_times[addr].push_back(time_ms);
+    ++received_count;
+    average_time += (time_ms - average_time) / received_count;
+}
+
 std::ostream & operator<<(std::ostream & os, const EchoReply & reply)
 {
     if(reply.address_times.empty())
-        os << "*";
-    else
     {
-        std::string address_separator = "";
-
-        for(auto && addr_time : reply.address_times)
-        {
-            std::string time_separator = "";
-
-            os << address_separator << addr_time.first << " -- ";
-
-            for(auto && resp_time : addr_time.second)
-            {
-                os << time_separator << resp_time << " ms";
-                time_separator = ", ";
-            }
-
-            address_separator = " / ";
-        }
-
-        os << " (avg " << reply.average_time << " ms)";
+        os << "*";
+        return os;
     }
 
+    std::string address_separator = "";
+
+    for(auto && addr_time : reply.address_times)
+    {
+        std::string time_separator = "";
+
+        os << address_separator << addr_time.first << " -- ";
+
+        for(auto && resp_time : addr_time.second)
+        {
+            os << time_separator << resp_time << " ms";
+            time_separator = ", ";
+        }
+
+        address_separator = " / ";
+    }
+
+    os << " (avg " << reply.average_time << " ms)";
     return os;
 }
 
 #pragma endregion
 #pragma region ICMPController
 
-void ICMPController::echo_request(const IPAddress & address, uint16_t id, uint16_t ttl)
+void ICMPController::echo_request(const IPv4Address & address, uint16_t id, uint16_t ttl)
 {
     for(uint16_t i = 0; i < attempts; ++i)
     {
@@ -68,9 +76,9 @@ EchoReply ICMPController::echo_reply(uint16_t id, uint16_t ttl)
         if(ready == 0)
             break;
 
-        IPAddress address = receive_echo(id, ttl);
+        IPv4Address address = receive_echo(id, ttl);
 
-        if(address == IPAddress(0))
+        if(address == IPv4Address(0))
             continue;
 
         reply.add(address, (1000000 - timer.tv_usec) / 1000);
@@ -119,7 +127,7 @@ std::tuple<const iphdr *, const icmphdr *, const uint8_t *>
     return std::make_tuple(hIP, hICMP, body);
 }
 
-IPAddress ICMPController::receive_echo(uint16_t id, uint16_t ttl)
+IPv4Address ICMPController::receive_echo(uint16_t id, uint16_t ttl)
 {
     SocketReceiver::Message message = receiver.receive();
     const iphdr * hIP;
@@ -131,7 +139,7 @@ IPAddress ICMPController::receive_echo(uint16_t id, uint16_t ttl)
     if(hICMP->type == 0)
     {
         if(hICMP->un.echo.id != id || hICMP->un.echo.sequence / attempts != ttl)
-            return IPAddress(0);
+            return IPv4Address(0);
     }
     else if(hICMP->type == 11)
     {
@@ -141,7 +149,7 @@ IPAddress ICMPController::receive_echo(uint16_t id, uint16_t ttl)
         std::tie(hIP_body, hICMP_body, std::ignore) = extract_headers(body);
 
         if(hICMP_body->un.echo.id != id || hICMP_body->un.echo.sequence / attempts != ttl)
-            return IPAddress(0);
+            return IPv4Address(0);
     }
 
     return message.address();

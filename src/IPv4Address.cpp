@@ -1,10 +1,10 @@
-#include "IPAddress.hpp"
+#include "IPv4Address.hpp"
 #include <algorithm>
 #include <exception>
 #include <numeric>
 #include <stdexcept>
 
-IPAddress::IPAddress(const std::string & str)
+IPv4Address::IPv4Address(const std::string & str)
 {
     std::vector<std::string> split_str = split(str);
     std::vector<addr_t> addr_bytes;
@@ -27,21 +27,21 @@ IPAddress::IPAddress(const std::string & str)
                               [](addr_t acc, addr_t b) { return (acc << 8U) | b; });
 }
 
-IPAddress::operator std::string() const
+IPv4Address::operator std::string() const
 {
-    std::vector<IPAddress::addr_t> q = quadruple();
+    std::vector<IPv4Address::addr_t> q = quadruple();
 
     return std::to_string(q[0]) + "." + std::to_string(q[1]) + "." + std::to_string(q[2]) + "."
            + std::to_string(q[3]);
 }
 
-std::vector<IPAddress::addr_t> IPAddress::quadruple() const
+std::vector<IPv4Address::addr_t> IPv4Address::quadruple() const
 {
     return {(address & 0xFF000000U) >> 24U, (address & 0x00FF0000U) >> 16U,
             (address & 0x0000FF00U) >> 8U, address & 0x000000FFU};
 }
 
-std::vector<std::string> IPAddress::split(const std::string & str) const
+std::vector<std::string> IPv4Address::split(const std::string & str) const
 {
     std::vector<std::string> split_str;
     size_t begin_pos = 0;

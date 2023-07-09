@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 
 # SOURCES
 set(SOURCES
-    "IPAddress.cpp"
+    "IPv4Address.cpp"
     "ICMPController.cpp"
     "SocketReceiver.cpp"
     "SocketSender.cpp"

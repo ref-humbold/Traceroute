@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include <arpa/inet.h>
 #include <netinet/ip_icmp.h>
-#include "IPAddress.hpp"
+#include "IPv4Address.hpp"
 #include "RawSocket.hpp"
 
 class SocketSender
@@ -16,7 +16,7 @@ public:
     }
 
     void send(const void * message_buffer, int message_size) const;
-    SocketSender & address(const IPAddress & addr);
+    SocketSender & address(const IPv4Address & addr);
 
     SocketSender & ttl(uint16_t value)
     {

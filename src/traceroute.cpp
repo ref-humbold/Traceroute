@@ -17,7 +17,7 @@ int main(int argc, char * argv[])
         return 1;
     }
 
-    IPAddress destination(argv[1]);
+    IPv4Address destination(argv[1]);
     uint16_t pid = getpid();
     size_t steps = 32;
 
