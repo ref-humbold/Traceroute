@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <map>
+#include <optional>
 #include <vector>
 #include "SocketReceiver.hpp"
 #include "SocketSender.hpp"
@@ -42,7 +43,7 @@ public:
     const uint16_t attempts = 3;
 
 private:
-    Ip4Address receive_echo(uint16_t id, uint16_t ttl);
+    std::optional<Ip4Address> receive_echo(uint16_t id, uint16_t ttl);
     uint16_t count_checksum(const uint16_t * header, size_t length);
     icmphdr prepare_icmp(uint16_t id, uint16_t seq);
     std::tuple<const iphdr *, const icmphdr *, const uint8_t *>

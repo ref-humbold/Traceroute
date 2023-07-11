@@ -76,12 +76,12 @@ EchoReply IcmpController::echo_reply(uint16_t id, uint16_t ttl)
         if(ready == 0)
             break;
 
-        Ip4Address address = receive_echo(id, ttl);
+        std::optional<Ip4Address> address = receive_echo(id, ttl);
 
-        if(address == Ip4Address(0))
+        if(address)
             continue;
 
-        reply.add(address, (1000000 - timer.tv_usec) / 1000);
+        reply.add(*address, (1000000 - timer.tv_usec) / 1000);
     } while(reply.received_count < attempts);
 
     return reply;
@@ -127,7 +127,7 @@ std::tuple<const iphdr *, const icmphdr *, const uint8_t *>
     return std::make_tuple(header_ip, header_icmp, body);
 }
 
-Ip4Address IcmpController::receive_echo(uint16_t id, uint16_t ttl)
+std::optional<Ip4Address> IcmpController::receive_echo(uint16_t id, uint16_t ttl)
 {
     SocketReceiver::Message message = receiver.receive();
     const iphdr * header_ip;
@@ -139,7 +139,7 @@ Ip4Address IcmpController::receive_echo(uint16_t id, uint16_t ttl)
     if(header_icmp->type == 0)
     {
         if(header_icmp->un.echo.id != id || header_icmp->un.echo.sequence / attempts != ttl)
-            return Ip4Address(0);
+            return std::nullopt;
     }
     else if(header_icmp->type == 11)
     {
@@ -150,10 +150,10 @@ Ip4Address IcmpController::receive_echo(uint16_t id, uint16_t ttl)
 
         if(header_icmp_body->un.echo.id != id
            || header_icmp_body->un.echo.sequence / attempts != ttl)
-            return Ip4Address(0);
+            return std::nullopt;
     }
 
-    return message.address();
+    return std::make_optional(message.address());
 }
 
 #pragma endregion
