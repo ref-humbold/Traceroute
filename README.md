@@ -5,7 +5,7 @@
 Simple ICMP traceroute
 
 ## About
-Traceroute shows a path through the Internet from your computer to a specified address. This implementation uses ICMP packages and raw sockets. Paths up to 32 steps are recognized.
+Traceroute shows a path through the Internet from your computer to a specified address. This implementation uses ICMP packages and raw sockets. Only paths up to specified limit of steps (32 by default) are recognized.
 
 ### Output format
 When there are replies for *any* of the requests sent, then reply addresses are displayed with their reply times and average reply time at the end:
@@ -29,9 +29,9 @@ General:
 + Linux-based operating system \
   *((Debian testing))*
 + C++ compiler \
-  *((APT package `g++`, 12.2.+))*
+  *((APT package `g++`, 12.3.+))*
 + [CMake](https://cmake.org/) \
-  *((APT package `cmake`, 3.25.+))*
+  *((APT package `cmake`, 3.26.+))*
 + [GNU Make](https://www.gnu.org/software/make) \
   *((APT package `make`, 4.3.+))*
 
@@ -58,7 +58,15 @@ $ make
 
 Traceroute can be run directly using the executable file in the `buildOut/bin` root directory:
 ```sh
-$ sudo /path-to-project-directory/buildOut/bin/traceroute ADDRESS
+$ sudo /path-to-project-directory/buildOut/bin/traceroute OPTIONS ARGUMENTS
 ```
 
-ADDRESS - IPv4 address of the destination
+### Synopsis
+**traceroute** \[**-L** *limit*\] *ADDRESS*
+
+### Description
+Track the route of Internet packages on their path to IPv4 address *ADDRESS*. Only paths of length up to *limit* are being tracked.
+
+### Options
+**-L** *limit*
+> Declare maximal path length to track, default is 32.

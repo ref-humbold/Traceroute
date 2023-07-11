@@ -4,26 +4,23 @@
 #include <set>
 #include <string>
 #include <unistd.h>
-#include "ICMPController.hpp"
+#include "AppParameters.hpp"
+#include "IcmpController.hpp"
 
 int main(int argc, char * argv[])
+try
 {
     RawSocket socket = RawSocket(IPPROTO_ICMP);
-    ICMPController socket_ctrl = ICMPController(socket);
+    IcmpController socket_ctrl = IcmpController(socket);
+    AppParameters parameters = parse_args(argc, argv);
 
-    if(argc < 2)
-    {
-        std::cerr << "No destination IP specified";
-        return 1;
-    }
-
-    IPv4Address destination(argv[1]);
+    Ip4Address destination(parameters.address);
     uint16_t pid = getpid();
-    size_t steps = 32;
 
-    std::cout << "  traceroute :: destination " << destination << " :: max " << steps << " steps\n";
+    std::cout << "  traceroute :: destination " << destination << " :: max " << parameters.steps
+              << " steps\n";
 
-    for(size_t i = 1; i <= steps; ++i)
+    for(size_t i = 1; i <= parameters.steps; ++i)
     {
         socket_ctrl.echo_request(destination, pid, i);
 
@@ -36,4 +33,9 @@ int main(int argc, char * argv[])
     }
 
     return 0;
+}
+catch(const std::exception & ex)
+{
+    std::cerr << "ERROR: " << ex.what() << "\n";
+    return 1;
 }

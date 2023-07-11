@@ -1,4 +1,4 @@
-#include "ICMPController.hpp"
+#include "IcmpController.hpp"
 #include <cerrno>
 #include <cstring>
 #include <ctime>
@@ -7,7 +7,7 @@
 
 #pragma region EchoReply
 
-void EchoReply::add(IPv4Address addr, size_t time_ms)
+void EchoReply::add(Ip4Address addr, size_t time_ms)
 {
     address_times.emplace(addr, std::vector<size_t>());
     address_times[addr].push_back(time_ms);
@@ -45,9 +45,9 @@ std::ostream & operator<<(std::ostream & os, const EchoReply & reply)
 }
 
 #pragma endregion
-#pragma region ICMPController
+#pragma region IcmpController
 
-void ICMPController::echo_request(const IPv4Address & address, uint16_t id, uint16_t ttl)
+void IcmpController::echo_request(const Ip4Address & address, uint16_t id, uint16_t ttl)
 {
     for(uint16_t i = 0; i < attempts; ++i)
     {
@@ -57,7 +57,7 @@ void ICMPController::echo_request(const IPv4Address & address, uint16_t id, uint
     }
 }
 
-EchoReply ICMPController::echo_reply(uint16_t id, uint16_t ttl)
+EchoReply IcmpController::echo_reply(uint16_t id, uint16_t ttl)
 {
     EchoReply reply;
     fd_set fd;
@@ -76,18 +76,18 @@ EchoReply ICMPController::echo_reply(uint16_t id, uint16_t ttl)
         if(ready == 0)
             break;
 
-        IPv4Address address = receive_echo(id, ttl);
+        std::optional<Ip4Address> address = receive_echo(id, ttl);
 
-        if(address == IPv4Address(0))
+        if(!address)
             continue;
 
-        reply.add(address, (1000000 - timer.tv_usec) / 1000);
+        reply.add(*address, (1000000 - timer.tv_usec) / 1000);
     } while(reply.received_count < attempts);
 
     return reply;
 }
 
-uint16_t ICMPController::count_checksum(const uint16_t * header, size_t length)
+uint16_t IcmpController::count_checksum(const uint16_t * header, size_t length)
 {
     if(length % 2 == 1)
         throw SocketException("Incorrect length of ICMP header");
@@ -105,7 +105,7 @@ uint16_t ICMPController::count_checksum(const uint16_t * header, size_t length)
     return static_cast<uint16_t>(~(sum + (sum >> 16U)));
 }
 
-icmphdr ICMPController::prepare_icmp(uint16_t id, uint16_t seq)
+icmphdr IcmpController::prepare_icmp(uint16_t id, uint16_t seq)
 {
     icmphdr header = {};
     header.type = ICMP_ECHO;
@@ -118,41 +118,42 @@ icmphdr ICMPController::prepare_icmp(uint16_t id, uint16_t seq)
 }
 
 std::tuple<const iphdr *, const icmphdr *, const uint8_t *>
-        ICMPController::extract_headers(const uint8_t * ptr)
+        IcmpController::extract_headers(const uint8_t * ptr)
 {
-    const iphdr * hIP = reinterpret_cast<const iphdr *>(ptr);
-    const icmphdr * hICMP = reinterpret_cast<const icmphdr *>(ptr + 4U * hIP->ihl);
-    const uint8_t * body = ptr + 4U * hIP->ihl + sizeof(icmphdr);
+    const iphdr * header_ip = reinterpret_cast<const iphdr *>(ptr);
+    const icmphdr * header_icmp = reinterpret_cast<const icmphdr *>(ptr + 4U * header_ip->ihl);
+    const uint8_t * body = ptr + 4U * header_ip->ihl + sizeof(icmphdr);
 
-    return std::make_tuple(hIP, hICMP, body);
+    return std::make_tuple(header_ip, header_icmp, body);
 }
 
-IPv4Address ICMPController::receive_echo(uint16_t id, uint16_t ttl)
+std::optional<Ip4Address> IcmpController::receive_echo(uint16_t id, uint16_t ttl)
 {
     SocketReceiver::Message message = receiver.receive();
-    const iphdr * hIP;
-    const icmphdr * hICMP;
+    const iphdr * header_ip;
+    const icmphdr * header_icmp;
     const uint8_t * body;
 
-    std::tie(hIP, hICMP, body) = extract_headers(message.message().data());
+    std::tie(header_ip, header_icmp, body) = extract_headers(message.message().data());
 
-    if(hICMP->type == 0)
+    if(header_icmp->type == 0)
     {
-        if(hICMP->un.echo.id != id || hICMP->un.echo.sequence / attempts != ttl)
-            return IPv4Address(0);
+        if(header_icmp->un.echo.id != id || header_icmp->un.echo.sequence / attempts != ttl)
+            return std::nullopt;
     }
-    else if(hICMP->type == 11)
+    else if(header_icmp->type == 11)
     {
-        const iphdr * hIP_body;
-        const icmphdr * hICMP_body;
+        const iphdr * header_ip_body;
+        const icmphdr * header_icmp_body;
 
-        std::tie(hIP_body, hICMP_body, std::ignore) = extract_headers(body);
+        std::tie(header_ip_body, header_icmp_body, std::ignore) = extract_headers(body);
 
-        if(hICMP_body->un.echo.id != id || hICMP_body->un.echo.sequence / attempts != ttl)
-            return IPv4Address(0);
+        if(header_icmp_body->un.echo.id != id
+           || header_icmp_body->un.echo.sequence / attempts != ttl)
+            return std::nullopt;
     }
 
-    return message.address();
+    return std::make_optional(message.address());
 }
 
 #pragma endregion
