@@ -5,7 +5,7 @@
 Simple ICMP traceroute
 
 ## About
-Traceroute shows a path through the Internet from your computer to a specified address. This implementation uses ICMP packages and raw sockets. Paths up to 32 steps (by default) are recognized.
+Traceroute shows a path through the Internet from your computer to a specified address. This implementation uses ICMP packages and raw sockets. Only paths up to specified limit of steps (32 by default) are recognized.
 
 ### Output format
 When there are replies for *any* of the requests sent, then reply addresses are displayed with their reply times and average reply time at the end:
@@ -62,10 +62,11 @@ $ sudo /path-to-project-directory/buildOut/bin/traceroute OPTIONS ARGUMENTS
 ```
 
 ### Synopsis
+**traceroute** \[**-L** *limit*\] *ADDRESS*
 
-```sh
-$ traceroute [-S steps_count] ADDRESS
-```
+### Description
+Track the route of Internet packages on their path to IPv4 address *ADDRESS*. Only paths of length up to *limit* are being tracked.
 
-+ **`-S` *`steps_limit`*** maximal number of steps to check (default 32)
-+ **`ADDRESS`** IPv4 address of the destination
+### Options
+**-L** *limit*
+> Declare maximal path length to track, default is 32.
