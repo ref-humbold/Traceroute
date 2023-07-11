@@ -58,7 +58,14 @@ $ make
 
 Traceroute can be run directly using the executable file in the `buildOut/bin` root directory:
 ```sh
-$ sudo /path-to-project-directory/buildOut/bin/traceroute ADDRESS
+$ sudo /path-to-project-directory/buildOut/bin/traceroute OPTIONS ARGUMENTS
 ```
 
-ADDRESS - IPv4 address of the destination
+### Synopsis
+
+```sh
+$ traceroute [-S steps_count] ADDRESS
+```
+
++ **`-S` *`steps_limit`*** maximal number of steps to check (default 32)
++ **`ADDRESS`** IPv4 address of the destination

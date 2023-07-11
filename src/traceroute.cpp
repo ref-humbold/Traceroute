@@ -5,16 +5,16 @@
 #include <string>
 #include <unistd.h>
 #include "AppParameters.hpp"
-#include "ICMPController.hpp"
+#include "IcmpController.hpp"
 
 int main(int argc, char * argv[])
 try
 {
     RawSocket socket = RawSocket(IPPROTO_ICMP);
-    ICMPController socket_ctrl = ICMPController(socket);
+    IcmpController socket_ctrl = IcmpController(socket);
     AppParameters parameters = parse_args(argc, argv);
 
-    IPv4Address destination(parameters.address);
+    Ip4Address destination(parameters.address);
     uint16_t pid = getpid();
 
     std::cout << "  traceroute :: destination " << destination << " :: max " << parameters.steps

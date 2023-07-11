@@ -14,7 +14,7 @@ void SocketSender::send(const void * message_buffer, int message_size) const
         throw SocketException(strerror(errno));
 }
 
-SocketSender & SocketSender::address(const IPv4Address & addr)
+SocketSender & SocketSender::address(const Ip4Address & addr)
 {
     address_.sin_family = AF_INET;
 

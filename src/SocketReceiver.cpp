@@ -19,7 +19,7 @@ SocketReceiver::Message SocketReceiver::receive() const
                                                  std::begin(message_buffer) + message_size));
 }
 
-IPv4Address SocketReceiver::Message::address() const
+Ip4Address SocketReceiver::Message::address() const
 {
     char ip_str[32];
     const char * result = inet_ntop(AF_INET, &(address_.sin_addr), ip_str, sizeof(ip_str));
@@ -27,5 +27,5 @@ IPv4Address SocketReceiver::Message::address() const
     if(result == nullptr)
         throw SocketException(strerror(errno));
 
-    return IPv4Address(std::string(ip_str));
+    return Ip4Address(std::string(ip_str));
 }
