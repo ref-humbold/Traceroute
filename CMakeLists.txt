@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(Traceroute VERSION 1.1.200119)
+project(Traceroute VERSION 2.0.230711)
 
 # PROPERTIES
 set(EXE_NAME traceroute)
