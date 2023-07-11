@@ -9,7 +9,7 @@ size_t parse_number(const std::string & s, const std::string & arg_name)
 
     try
     {
-        value = std::stoi(s, &pos);
+        value = std::stoul(s, &pos);
     }
     catch(const std::invalid_argument & e)
     {

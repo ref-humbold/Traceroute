@@ -78,7 +78,7 @@ EchoReply IcmpController::echo_reply(uint16_t id, uint16_t ttl)
 
         std::optional<Ip4Address> address = receive_echo(id, ttl);
 
-        if(address)
+        if(!address)
             continue;
 
         reply.add(*address, (1000000 - timer.tv_usec) / 1000);
