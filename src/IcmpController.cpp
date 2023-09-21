@@ -81,7 +81,7 @@ EchoReply IcmpController::echo_reply(uint16_t id, uint16_t ttl)
         if(!address)
             continue;
 
-        reply.add(*address, (1000000 - timer.tv_usec) / 1000);
+        reply.add(*address, (1'000'000 - timer.tv_usec) / 1000);
     } while(reply.received_count < attempts);
 
     return reply;

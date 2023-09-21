@@ -12,9 +12,11 @@ Ip4Address::Ip4Address(const std::string & str)
     if(split_str.size() != 4)
         throw std::invalid_argument("Parameter is not a valid IP address");
 
-    if(std::any_of(split_str.begin(), split_str.end(), [](const std::string & s) {
-           return std::any_of(s.begin(), s.end(), [](char c) { return c < '0' || c > '9'; });
-       }))
+    if(std::any_of(split_str.begin(), split_str.end(),
+                   [](const std::string & s) {
+                       return std::any_of(s.begin(), s.end(),
+                                          [](char c) { return c < '0' || c > '9'; });
+                   }))
         throw std::invalid_argument("Parameter is not a valid IP address");
 
     std::transform(split_str.begin(), split_str.end(), std::back_inserter(addr_bytes),
