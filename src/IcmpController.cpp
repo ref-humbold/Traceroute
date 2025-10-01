@@ -5,48 +5,6 @@
 #include <string>
 #include <tuple>
 
-#pragma region EchoReply
-
-void EchoReply::add(Ip4Address addr, size_t time_ms)
-{
-    address_times.emplace(addr, std::vector<size_t>());
-    address_times[addr].push_back(time_ms);
-    ++received_count;
-    average_time += (time_ms - average_time) / received_count;
-}
-
-std::ostream & operator<<(std::ostream & os, const EchoReply & reply)
-{
-    if(reply.address_times.empty())
-    {
-        os << "*";
-        return os;
-    }
-
-    std::string address_separator = "";
-
-    for(auto && addr_time : reply.address_times)
-    {
-        std::string time_separator = "";
-
-        os << address_separator << addr_time.first << " -- ";
-
-        for(auto && resp_time : addr_time.second)
-        {
-            os << time_separator << resp_time << " ms";
-            time_separator = ", ";
-        }
-
-        address_separator = " / ";
-    }
-
-    os << " (avg " << reply.average_time << " ms)";
-    return os;
-}
-
-#pragma endregion
-#pragma region IcmpController
-
 void IcmpController::echo_request(const Ip4Address & address, uint16_t id, uint16_t ttl)
 {
     for(uint16_t i = 0; i < attempts; ++i)
@@ -155,5 +113,3 @@ std::optional<Ip4Address> IcmpController::receive_echo(uint16_t id, uint16_t ttl
 
     return std::make_optional(message.address());
 }
-
-#pragma endregion

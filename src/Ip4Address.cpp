@@ -13,20 +13,21 @@ Ip4Address::Ip4Address(const std::string & str)
         throw std::invalid_argument("Parameter is not a valid IP address");
 
     if(std::any_of(split_str.begin(), split_str.end(),
-                   [](const std::string & s) {
-                       return std::any_of(s.begin(), s.end(),
-                                          [](char c) { return c < '0' || c > '9'; });
-                   }))
+               [](const std::string & s)
+               {
+                   return std::any_of(s.begin(), s.end(),
+                           [](char c) { return c < '0' || c > '9'; });
+               }))
         throw std::invalid_argument("Parameter is not a valid IP address");
 
     std::transform(split_str.begin(), split_str.end(), std::back_inserter(addr_bytes),
-                   [](const std::string & s) { return stoul(s); });
+            [](const std::string & s) { return stoul(s); });
 
     if(std::any_of(addr_bytes.begin(), addr_bytes.end(), [](addr_t p) { return p > 255; }))
         throw std::invalid_argument("Parameter is not a valid IP address");
 
     address = std::accumulate(addr_bytes.begin(), addr_bytes.end(), 0,
-                              [](addr_t acc, addr_t b) { return (acc << 8U) | b; });
+            [](addr_t acc, addr_t b) { return (acc << 8U) | b; });
 }
 
 Ip4Address::operator std::string() const
@@ -40,7 +41,7 @@ Ip4Address::operator std::string() const
 std::vector<Ip4Address::addr_t> Ip4Address::quadruple() const
 {
     return {(address & 0xFF000000U) >> 24U, (address & 0x00FF0000U) >> 16U,
-            (address & 0x0000FF00U) >> 8U, address & 0x000000FFU};
+        (address & 0x0000FF00U) >> 8U, address & 0x000000FFU};
 }
 
 std::vector<std::string> Ip4Address::split(const std::string & str) const

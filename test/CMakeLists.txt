@@ -10,6 +10,7 @@ find_package(Threads REQUIRED)
 
 # SOURCES
 set(TEST_SOURCES
+    "EchoReply_test.cpp"
     "Ip4Address_test.cpp")
 
 # OUTPUT
