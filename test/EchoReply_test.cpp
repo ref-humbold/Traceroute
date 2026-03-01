@@ -7,7 +7,7 @@ TEST(EchoReplyTest, add_WhenFirstReceived_ThenAdded)
 {
     // given
     EchoReply reply;
-    Ip4Address address("127.0.0.1");
+    Ip4Address address(0x7F000001);
     size_t time_ms = 30;
 
     // when
@@ -24,7 +24,7 @@ TEST(EchoReplyTest, add_WhenReceivedFromSameAddress_ThenAddedToAddress)
 {
     // given
     EchoReply reply;
-    Ip4Address address("127.0.0.1");
+    Ip4Address address(0x7F000001);
     size_t time_ms_1 = 30, time_ms_2 = 20;
 
     reply.add(address, time_ms_1);
@@ -43,7 +43,7 @@ TEST(EchoReplyTest, add_WhenReceivedFromOtherAddress_ThenAddedAsOther)
 {
     // given
     EchoReply reply;
-    Ip4Address address_1("127.0.0.1"), address_2("127.0.0.2");
+    Ip4Address address_1(0x7F000001), address_2(0x7F000002);
     size_t time_ms_1 = 30, time_ms_2 = 20;
 
     reply.add(address_1, time_ms_1);

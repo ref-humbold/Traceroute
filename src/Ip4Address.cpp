@@ -1,30 +1,28 @@
 #include "Ip4Address.hpp"
-#include <algorithm>
-#include <exception>
 #include <numeric>
 #include <stdexcept>
+#include <regex>
 
 Ip4Address::Ip4Address(const std::string & str)
 {
-    std::vector<std::string> split_str = split(str);
+    std::regex ip_regex(R"=((\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))=");
+    std::regex number_regex(R"=(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])=");
+    std::smatch ip_match;
+
+    std::regex_match(str, ip_match, ip_regex);
+
+    if(ip_match.size() != 5)
+        throw std::invalid_argument("Parameter is not a valid IP address");
+
     std::vector<addr_t> addr_bytes;
 
-    if(split_str.size() != 4)
-        throw std::invalid_argument("Parameter is not a valid IP address");
+    for(auto match = ip_match.begin() +1; match != ip_match.end(); ++match)
+    {
+        if(!std::regex_match(match->str(), number_regex))
+            throw std::invalid_argument("Parameter is not a valid IP address");
 
-    if(std::any_of(split_str.begin(), split_str.end(),
-               [](const std::string & s)
-               {
-                   return std::any_of(s.begin(), s.end(),
-                           [](char c) { return c < '0' || c > '9'; });
-               }))
-        throw std::invalid_argument("Parameter is not a valid IP address");
-
-    std::transform(split_str.begin(), split_str.end(), std::back_inserter(addr_bytes),
-            [](const std::string & s) { return stoul(s); });
-
-    if(std::any_of(addr_bytes.begin(), addr_bytes.end(), [](addr_t p) { return p > 255; }))
-        throw std::invalid_argument("Parameter is not a valid IP address");
+        addr_bytes.push_back(stoul(match->str()));
+    }
 
     address = std::accumulate(addr_bytes.begin(), addr_bytes.end(), 0,
             [](addr_t acc, addr_t b) { return (acc << 8U) | b; });
@@ -42,28 +40,4 @@ std::vector<Ip4Address::addr_t> Ip4Address::quadruple() const
 {
     return {(address & 0xFF000000U) >> 24U, (address & 0x00FF0000U) >> 16U,
         (address & 0x0000FF00U) >> 8U, address & 0x000000FFU};
-}
-
-std::vector<std::string> Ip4Address::split(const std::string & str) const
-{
-    std::vector<std::string> split_str;
-    size_t begin_pos = 0;
-
-    while(begin_pos != std::string::npos)
-    {
-        size_t end_pos = str.find('.', begin_pos);
-
-        if(end_pos != std::string::npos)
-        {
-            split_str.push_back(str.substr(begin_pos, end_pos - begin_pos));
-            begin_pos = end_pos + 1;
-        }
-        else
-        {
-            split_str.push_back(str.substr(begin_pos));
-            begin_pos = end_pos;
-        }
-    }
-
-    return split_str;
 }

@@ -2,7 +2,6 @@
 #define IP4_ADDRESS_HPP_
 
 #include <cinttypes>
-#include <cstdlib>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -36,7 +35,6 @@ public:
 
 private:
     std::vector<addr_t> quadruple() const;
-    std::vector<std::string> split(const std::string & str) const;
 
     addr_t address;
 };

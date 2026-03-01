@@ -1,7 +1,6 @@
 #ifndef PARAMETERS_HPP_
 #define PARAMETERS_HPP_
 
-#include <exception>
 #include <stdexcept>
 #include <string>
 

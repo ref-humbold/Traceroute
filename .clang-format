@@ -1,4 +1,4 @@
-# VERSION 19
+# VERSION 21
 Language: Cpp
 Standard: c++17
 LineEnding: DeriveLF
@@ -29,21 +29,21 @@ AllowShortFunctionsOnASingleLine: None
 AllowShortIfStatementsOnASingleLine: Never
 AllowShortLambdasOnASingleLine: All
 AllowShortLoopsOnASingleLine: false
-#20 AllowShortNamespacesOnASingleLine: false
+AllowShortNamespacesOnASingleLine: false
 AlwaysBreakBeforeMultilineStrings: false
 BinPackArguments: true
-#21 BinPackLongBracedList: true
-BinPackParameters: false #20 OnePerLine
+BinPackLongBracedList: true
+BinPackParameters: OnePerLine
 BitFieldColonSpacing: Both
 BracedInitializerIndentWidth: 4
 BreakAdjacentStringLiterals: false
 BreakAfterAttributes: Always
 BreakAfterReturnType: ExceptShortType
 BreakBeforeBinaryOperators: NonAssignment
-#20 BreakBinaryOperations: Never
+BreakBinaryOperations: Never
 BreakBeforeBraces: Allman
 BreakBeforeConceptDeclarations: Always
-#21 BreakBeforeTemplateCloser: true
+BreakBeforeTemplateCloser: true
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializers: BeforeColon
 BreakFunctionDefinitionParameters: false
@@ -87,7 +87,7 @@ IncludeIsMainSourceRegex: "$"
 IndentAccessModifiers: false
 IndentCaseBlocks: true
 IndentCaseLabels: true
-#20 IndentExportBlock: false
+IndentExportBlock: false
 IndentExternBlock: NoIndent
 IndentGotoLabels: false
 IndentPPDirectives: None
@@ -116,7 +116,7 @@ PointerAlignment: Middle
 QualifierAlignment: Leave
 ReferenceAlignment: Pointer
 ReflowComments: false
-#20 RemoveEmptyLinesInUnwrappedLines: true
+RemoveEmptyLinesInUnwrappedLines: true
 RequiresClausePosition: OwnLine
 RequiresExpressionIndentation: OuterScope
 SeparateDefinitionBlocks: Always
@@ -154,4 +154,4 @@ SpacesInParens: Never
 SpacesInSquareBrackets: false
 TabWidth: 4
 UseTab: Never
-#20 WrapNamespaceBodyWithEmptyLines: false
+WrapNamespaceBodyWithEmptyLines: Never

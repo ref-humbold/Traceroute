@@ -2,14 +2,12 @@
 #define RAW_SOCKET_HPP_
 
 #include <cerrno>
-#include <cstdlib>
 #include <cstring>
-#include <exception>
 #include <stdexcept>
 #include <string>
 #include <unistd.h>
 
-struct SocketException : public std::logic_error
+struct SocketException : std::logic_error
 {
     explicit SocketException(const char * s) : std::logic_error(s)
     {
