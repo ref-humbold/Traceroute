@@ -1,9 +1,8 @@
 #ifndef ICMP_CONTROLLER_HPP_
 #define ICMP_CONTROLLER_HPP_
 
-#include <cstdlib>
 #include <optional>
-#include "EchoReply.hpp"
+#include "RepliesMap.hpp"
 #include "SocketReceiver.hpp"
 #include "SocketSender.hpp"
 
@@ -16,7 +15,7 @@ public:
     }
 
     void echo_request(const Ip4Address & address, uint16_t id, uint16_t ttl);
-    EchoReply echo_reply(uint16_t id, uint16_t ttl);
+    RepliesMap echo_reply(uint16_t id, uint16_t ttl);
 
     const uint16_t attempts = 3;
 

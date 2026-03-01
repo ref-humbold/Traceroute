@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.10)
 # SOURCES
 set(LIB_SOURCES
     "AppParameters.cpp"
-    "EchoReply.cpp"
+    "RepliesMap.cpp"
     "IcmpController.cpp"
     "Ip4Address.cpp"
     "SocketReceiver.cpp"

@@ -15,9 +15,9 @@ void IcmpController::echo_request(const Ip4Address & address, uint16_t id, uint1
     }
 }
 
-EchoReply IcmpController::echo_reply(uint16_t id, uint16_t ttl)
+RepliesMap IcmpController::echo_reply(uint16_t id, uint16_t ttl)
 {
-    EchoReply reply;
+    RepliesMap replies_map;
     fd_set fd;
     timeval timer = {.tv_sec = 1, .tv_usec = 0};
 
@@ -39,10 +39,10 @@ EchoReply IcmpController::echo_reply(uint16_t id, uint16_t ttl)
         if(!address)
             continue;
 
-        reply.add(*address, (1'000'000 - timer.tv_usec) / 1000);
-    } while(reply.received_count < attempts);
+        replies_map.add(*address, (1'000'000 - timer.tv_usec) / 1000);
+    } while(replies_map.size() < attempts);
 
-    return reply;
+    return replies_map;
 }
 
 uint16_t IcmpController::count_checksum(const uint16_t * header, size_t length)
@@ -78,8 +78,8 @@ icmphdr IcmpController::prepare_icmp(uint16_t id, uint16_t seq)
 std::tuple<const iphdr *, const icmphdr *, const uint8_t *>
         IcmpController::extract_headers(const uint8_t * ptr)
 {
-    const iphdr * header_ip = reinterpret_cast<const iphdr *>(ptr);
-    const icmphdr * header_icmp = reinterpret_cast<const icmphdr *>(ptr + 4U * header_ip->ihl);
+    auto header_ip = reinterpret_cast<const iphdr *>(ptr);
+    auto header_icmp = reinterpret_cast<const icmphdr *>(ptr + 4U * header_ip->ihl);
     const uint8_t * body = ptr + 4U * header_ip->ihl + sizeof(icmphdr);
 
     return std::make_tuple(header_ip, header_icmp, body);
