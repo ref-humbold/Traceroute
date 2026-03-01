@@ -1,33 +1,10 @@
 #ifndef ICMP_CONTROLLER_HPP_
 #define ICMP_CONTROLLER_HPP_
 
-#include <cstdlib>
-#include <iostream>
-#include <map>
 #include <optional>
-#include <vector>
+#include "RepliesMap.hpp"
 #include "SocketReceiver.hpp"
 #include "SocketSender.hpp"
-
-#pragma region EchoReply
-
-struct EchoReply
-{
-    EchoReply() : average_time{0.0}, received_count{0}
-    {
-    }
-
-    void add(Ip4Address addr, size_t time_ms);
-
-    std::map<Ip4Address, std::vector<size_t>> address_times;
-    double average_time;
-    size_t received_count;
-};
-
-std::ostream & operator<<(std::ostream & os, const EchoReply & reply);
-
-#pragma endregion
-#pragma region IcmpController
 
 class IcmpController
 {
@@ -38,7 +15,7 @@ public:
     }
 
     void echo_request(const Ip4Address & address, uint16_t id, uint16_t ttl);
-    EchoReply echo_reply(uint16_t id, uint16_t ttl);
+    RepliesMap echo_reply(uint16_t id, uint16_t ttl);
 
     const uint16_t attempts = 3;
 
@@ -54,5 +31,4 @@ private:
     SocketReceiver receiver;
 };
 
-#pragma endregion
 #endif

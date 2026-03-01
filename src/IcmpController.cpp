@@ -5,48 +5,6 @@
 #include <string>
 #include <tuple>
 
-#pragma region EchoReply
-
-void EchoReply::add(Ip4Address addr, size_t time_ms)
-{
-    address_times.emplace(addr, std::vector<size_t>());
-    address_times[addr].push_back(time_ms);
-    ++received_count;
-    average_time += (time_ms - average_time) / received_count;
-}
-
-std::ostream & operator<<(std::ostream & os, const EchoReply & reply)
-{
-    if(reply.address_times.empty())
-    {
-        os << "*";
-        return os;
-    }
-
-    std::string address_separator = "";
-
-    for(auto && addr_time : reply.address_times)
-    {
-        std::string time_separator = "";
-
-        os << address_separator << addr_time.first << " -- ";
-
-        for(auto && resp_time : addr_time.second)
-        {
-            os << time_separator << resp_time << " ms";
-            time_separator = ", ";
-        }
-
-        address_separator = " / ";
-    }
-
-    os << " (avg " << reply.average_time << " ms)";
-    return os;
-}
-
-#pragma endregion
-#pragma region IcmpController
-
 void IcmpController::echo_request(const Ip4Address & address, uint16_t id, uint16_t ttl)
 {
     for(uint16_t i = 0; i < attempts; ++i)
@@ -57,9 +15,9 @@ void IcmpController::echo_request(const Ip4Address & address, uint16_t id, uint1
     }
 }
 
-EchoReply IcmpController::echo_reply(uint16_t id, uint16_t ttl)
+RepliesMap IcmpController::echo_reply(uint16_t id, uint16_t ttl)
 {
-    EchoReply reply;
+    RepliesMap replies_map;
     fd_set fd;
     timeval timer = {.tv_sec = 1, .tv_usec = 0};
 
@@ -81,10 +39,10 @@ EchoReply IcmpController::echo_reply(uint16_t id, uint16_t ttl)
         if(!address)
             continue;
 
-        reply.add(*address, (1'000'000 - timer.tv_usec) / 1000);
-    } while(reply.received_count < attempts);
+        replies_map.add(*address, (1'000'000 - timer.tv_usec) / 1000);
+    } while(replies_map.size() < attempts);
 
-    return reply;
+    return replies_map;
 }
 
 uint16_t IcmpController::count_checksum(const uint16_t * header, size_t length)
@@ -120,8 +78,8 @@ icmphdr IcmpController::prepare_icmp(uint16_t id, uint16_t seq)
 std::tuple<const iphdr *, const icmphdr *, const uint8_t *>
         IcmpController::extract_headers(const uint8_t * ptr)
 {
-    const iphdr * header_ip = reinterpret_cast<const iphdr *>(ptr);
-    const icmphdr * header_icmp = reinterpret_cast<const icmphdr *>(ptr + 4U * header_ip->ihl);
+    auto header_ip = reinterpret_cast<const iphdr *>(ptr);
+    auto header_icmp = reinterpret_cast<const icmphdr *>(ptr + 4U * header_ip->ihl);
     const uint8_t * body = ptr + 4U * header_ip->ihl + sizeof(icmphdr);
 
     return std::make_tuple(header_ip, header_icmp, body);
@@ -155,5 +113,3 @@ std::optional<Ip4Address> IcmpController::receive_echo(uint16_t id, uint16_t ttl
 
     return std::make_optional(message.address());
 }
-
-#pragma endregion

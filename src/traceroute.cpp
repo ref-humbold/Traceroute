@@ -11,7 +11,7 @@ int main(int argc, char * argv[])
 try
 {
     RawSocket socket = RawSocket(IPPROTO_ICMP);
-    IcmpController socket_ctrl = IcmpController(socket);
+    IcmpController controller = IcmpController(socket);
     AppParameters parameters = parse_args(argc, argv);
 
     Ip4Address destination(parameters.address);
@@ -22,13 +22,13 @@ try
 
     for(size_t i = 1; i <= parameters.steps; ++i)
     {
-        socket_ctrl.echo_request(destination, pid, i);
+        controller.echo_request(destination, pid, i);
 
-        EchoReply reply = socket_ctrl.echo_reply(pid, i);
+        RepliesMap replies_map = controller.echo_reply(pid, i);
 
-        std::cout << (i < 10 ? " " : "") << i << ". " << reply << "\n";
+        std::cout << (i < 10 ? " " : "") << i << ". " << replies_map << "\n";
 
-        if(reply.address_times.find(destination) != reply.address_times.end())
+        if(replies_map.contains(destination))
             break;
     }
 
