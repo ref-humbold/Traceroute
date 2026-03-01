@@ -1,0 +1,57 @@
+name: GitHub Actions
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        compiler:
+          - cc: gcc
+            cxx: g++
+          - cc: clang
+            cxx: clang++
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: APT Install Development Tools
+        run: sudo apt-get update && sudo apt-get install build-essential cmake libgtest-dev
+
+      - name: APT Install Clang
+        if: ${{ matrix.compiler.cc == 'clang' }}
+        run: sudo apt-get update && sudo apt-get install clang
+
+      - name: Install GTest
+        run: $GITHUB_WORKSPACE/ci/install_gtest.sh
+
+      - name: Create Build Environment
+        run: cmake -E make_directory ${{ github.workspace }}/build
+
+      - name: Configure CMake
+        working-directory: ${{ github.workspace }}/build
+        run: cmake $GITHUB_WORKSPACE -DCMAKE_C_COMPILER=${{ matrix.compiler.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.compiler.cxx }}
+
+      - name: Build
+        working-directory: ${{ github.workspace }}/build
+        run: make -s
+
+      - name: Test
+        working-directory: ${{ github.workspace }}/build
+        run: ctest -V --no-compress-output -T test
+
+  build-and-test-all:
+    if: ${{ always() }}
+    needs:
+      - build-and-test
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check matrix status
+        if: ${{ needs.build-and-test.result != 'success' }}
+        run: exit 1
