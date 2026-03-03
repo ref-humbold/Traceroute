@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <string>
 
-struct ParametersException : public std::runtime_error
+struct ParametersException : std::runtime_error
 {
     explicit ParametersException(const char * s) : std::runtime_error(s)
     {
@@ -22,13 +22,13 @@ public:
     {
     }
 
+    static AppParameters parse(int argc, char * argv[]);
+
     std::string address;
     size_t steps;
 
 private:
     static constexpr size_t default_steps = 32;
 };
-
-AppParameters parse_args(int argc, char * argv[]);
 
 #endif

@@ -1,8 +1,5 @@
-#include <cstring>
-#include <algorithm>
 #include <iostream>
 #include <set>
-#include <string>
 #include <unistd.h>
 #include "AppParameters.hpp"
 #include "IcmpController.hpp"
@@ -12,8 +9,7 @@ try
 {
     RawSocket socket = RawSocket(IPPROTO_ICMP);
     IcmpController controller = IcmpController(socket);
-    AppParameters parameters = parse_args(argc, argv);
-
+    AppParameters parameters = AppParameters::parse(argc, argv);
     Ip4Address destination(parameters.address);
     uint16_t pid = getpid();
 

@@ -4,7 +4,7 @@ Standard: c++17
 LineEnding: DeriveLF
 
 AccessModifierOffset: -4
-AlignAfterOpenBracket: DontAlign
+AlignAfterOpenBracket: DontAlign #22 false
 AlignArrayOfStructures: None
 AlignConsecutiveAssignments: None
 AlignConsecutiveBitFields: None
@@ -38,13 +38,24 @@ BitFieldColonSpacing: Both
 BracedInitializerIndentWidth: 4
 BreakAdjacentStringLiterals: false
 BreakAfterAttributes: Always
+#22 BreakAfterOpenBracketBracedList: false
+#22 BreakAfterOpenBracketFunction: false
+#22 BreakAfterOpenBracketIf: false
+#22 BreakAfterOpenBracketLoop: false
+#22 BreakAfterOpenBracketSwitch: false
 BreakAfterReturnType: ExceptShortType
 BreakBeforeBinaryOperators: NonAssignment
-BreakBinaryOperations: Never
 BreakBeforeBraces: Allman
+#22 BreakBeforeCloseBracketBracedList: false
+#22 BreakBeforeCloseBracketFunction: false
+#22 BreakBeforeCloseBracketIf: false
+#22 BreakBeforeCloseBracketLoop: false
+#22 BreakBeforeCloseBracketSwitch: false
 BreakBeforeConceptDeclarations: Always
 BreakBeforeTemplateCloser: true
 BreakBeforeTernaryOperators: true
+BreakBinaryOperations: Never
+#23  Default: Never
 BreakConstructorInitializers: BeforeColon
 BreakFunctionDefinitionParameters: false
 BreakInheritanceList: BeforeColon
@@ -58,6 +69,7 @@ Cpp11BracedListStyle: true
 DerivePointerAlignment: false
 EmptyLineAfterAccessModifier: Never
 EmptyLineBeforeAccessModifier: Always
+EnumTrailingComma: Leave
 FixNamespaceComments: false
 IncludeBlocks: Merge
 IncludeCategories:
@@ -110,12 +122,17 @@ LambdaBodyIndentation: Signature
 MainIncludeChar: Quote
 MaxEmptyLinesToKeep: 1
 NamespaceIndentation: All
+#22 NumericLiteralCase:
+#22   ExponentLetter: Lower
+#22   HexDigit: Upper
+#22   Prefix: Lower
+#22   Suffix: Upper
 PPIndentWidth: 0
 PackConstructorInitializers: NextLine
 PointerAlignment: Middle
 QualifierAlignment: Leave
 ReferenceAlignment: Pointer
-ReflowComments: false
+ReflowComments: IndentOnly
 RemoveEmptyLinesInUnwrappedLines: true
 RequiresClausePosition: OwnLine
 RequiresExpressionIndentation: OuterScope
@@ -125,6 +142,7 @@ SortIncludes: CaseSensitive
 SortUsingDeclarations: Lexicographic
 SpaceAfterCStyleCast: false
 SpaceAfterLogicalNot: false
+SpaceAfterOperatorKeyword: false
 SpaceAfterTemplateKeyword: true
 SpaceAroundPointerQualifiers: Default
 SpaceBeforeAssignmentOperators: true
@@ -143,7 +161,7 @@ SpaceBeforeParensOptions:
   AfterRequiresInExpression: true
 SpaceBeforeRangeBasedForLoopColon: true
 SpaceBeforeSquareBrackets: false
-SpaceInEmptyBlock: false
+SpaceInEmptyBlock: false #22 SpaceInEmptyBraces: Never
 SpacesBeforeTrailingComments: 2
 SpacesInAngles: Never
 SpacesInContainerLiterals: false

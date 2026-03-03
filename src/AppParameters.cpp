@@ -22,10 +22,10 @@ size_t parse_number(const std::string & s, const std::string & arg_name)
     return value;
 }
 
-AppParameters parse_args(int argc, char * argv[])
+AppParameters AppParameters::parse(int argc, char * argv[])
 {
     AppParameters params;
-    const std::string optstring = ":L:"s;
+    const auto optstring = ":L:"s;
     int option = getopt(argc, argv, optstring.c_str());
 
     opterr = 0;
@@ -42,8 +42,8 @@ AppParameters parse_args(int argc, char * argv[])
                 throw ParametersException("Unknown option -"s + static_cast<char>(optopt));
 
             case ':':
-                throw ParametersException("Option -"s + static_cast<char>(optopt)
-                                          + " requires an argument"s);
+                throw ParametersException(
+                        "Option -"s + static_cast<char>(optopt) + " requires an argument"s);
 
             default:
                 break;

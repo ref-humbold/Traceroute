@@ -23,8 +23,8 @@ private:
     std::optional<Ip4Address> receive_echo(uint16_t id, uint16_t ttl);
     uint16_t count_checksum(const uint16_t * header, size_t length);
     icmphdr prepare_icmp(uint16_t id, uint16_t seq);
-    std::tuple<const iphdr *, const icmphdr *, const uint8_t *>
-            extract_headers(const uint8_t * ptr);
+    std::tuple<const iphdr *, const icmphdr *, const uint8_t *> extract_headers(
+            const uint8_t * ptr);
 
     const RawSocket & socket;
     SocketSender sender;

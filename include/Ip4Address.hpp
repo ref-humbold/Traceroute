@@ -2,9 +2,9 @@
 #define IP4_ADDRESS_HPP_
 
 #include <cinttypes>
+#include <array>
 #include <iostream>
 #include <string>
-#include <vector>
 
 class Ip4Address
 {
@@ -34,7 +34,7 @@ public:
     explicit operator std::string() const;
 
 private:
-    std::vector<addr_t> quadruple() const;
+    std::array<addr_t, 4> quadruple() const;
 
     addr_t address;
 };
@@ -56,7 +56,7 @@ inline bool operator<(const Ip4Address & a1, const Ip4Address & a2)
 
 inline bool operator<=(const Ip4Address & a1, const Ip4Address & a2)
 {
-    return (a1 < a2) || (a1 == a2);
+    return a1 < a2 || a1 == a2;
 }
 
 inline bool operator>(const Ip4Address & a1, const Ip4Address & a2)
@@ -71,7 +71,7 @@ inline bool operator>=(const Ip4Address & a1, const Ip4Address & a2)
 
 inline std::ostream & operator<<(std::ostream & os, const Ip4Address & addr)
 {
-    std::vector<Ip4Address::addr_t> q = addr.quadruple();
+    std::array<Ip4Address::addr_t, 4> q = addr.quadruple();
 
     os << q[0] << "." << q[1] << "." << q[2] << "." << q[3];
     return os;

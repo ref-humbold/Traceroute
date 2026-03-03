@@ -75,8 +75,8 @@ icmphdr IcmpController::prepare_icmp(uint16_t id, uint16_t seq)
     return header;
 }
 
-std::tuple<const iphdr *, const icmphdr *, const uint8_t *>
-        IcmpController::extract_headers(const uint8_t * ptr)
+std::tuple<const iphdr *, const icmphdr *, const uint8_t *> IcmpController::extract_headers(
+        const uint8_t * ptr)
 {
     auto header_ip = reinterpret_cast<const iphdr *>(ptr);
     auto header_icmp = reinterpret_cast<const icmphdr *>(ptr + 4U * header_ip->ihl);
@@ -107,7 +107,7 @@ std::optional<Ip4Address> IcmpController::receive_echo(uint16_t id, uint16_t ttl
         std::tie(header_ip_body, header_icmp_body, std::ignore) = extract_headers(body);
 
         if(header_icmp_body->un.echo.id != id
-           || header_icmp_body->un.echo.sequence / attempts != ttl)
+                || header_icmp_body->un.echo.sequence / attempts != ttl)
             return std::nullopt;
     }
 

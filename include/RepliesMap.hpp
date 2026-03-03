@@ -21,7 +21,7 @@ public:
 
     const std::vector<size_t> & at(const Ip4Address & address) const
     {
-      return address_times.at(address);
+        return address_times.at(address);
     }
 
     bool contains(const Ip4Address & address) const
