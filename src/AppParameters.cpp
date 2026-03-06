@@ -11,7 +11,7 @@ size_t parse_number(const std::string & s, const std::string & arg_name)
     {
         value = std::stoul(s, &pos);
     }
-    catch(const std::invalid_argument & e)
+    catch(const std::invalid_argument &)
     {
         throw ParametersException("Given "s + arg_name + " is not a number"s);
     }

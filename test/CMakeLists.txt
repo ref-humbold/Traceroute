@@ -10,8 +10,9 @@ find_package(Threads REQUIRED)
 
 # SOURCES
 set(TEST_SOURCES
-    "RepliesMap_test.cpp"
-    "Ip4Address_test.cpp")
+    "AppParameters_test.cpp"
+    "Ip4Address_test.cpp"
+    "RepliesMap_test.cpp")
 
 # OUTPUT
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${TEST_EXE_OUTPUT_DIR}")
