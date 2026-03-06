@@ -9,13 +9,15 @@
 class Ip4Address
 {
 public:
-    using addr_t = uint32_t;
+    using address_t = uint32_t;
 
-    explicit Ip4Address(addr_t address) : address{address}
+    explicit Ip4Address(address_t address) : address{address}
     {
     }
 
-    explicit Ip4Address(const std::string & str);
+    explicit Ip4Address(const std::string & str) : Ip4Address(parse(str))
+    {
+    }
 
     Ip4Address(const Ip4Address &) = default;
     Ip4Address(Ip4Address &&) = default;
@@ -26,7 +28,7 @@ public:
     friend bool operator<(const Ip4Address & a1, const Ip4Address & a2);
     friend std::ostream & operator<<(std::ostream & os, const Ip4Address & a);
 
-    explicit operator addr_t() const
+    explicit operator address_t() const
     {
         return address;
     }
@@ -34,9 +36,10 @@ public:
     explicit operator std::string() const;
 
 private:
-    std::array<addr_t, 4> quadruple() const;
+    static uint32_t parse(const std::string & str);
+    std::array<address_t, 4> quadruple() const;
 
-    addr_t address;
+    address_t address;
 };
 
 inline bool operator==(const Ip4Address & a1, const Ip4Address & a2)
@@ -69,12 +72,6 @@ inline bool operator>=(const Ip4Address & a1, const Ip4Address & a2)
     return !(a1 < a2);
 }
 
-inline std::ostream & operator<<(std::ostream & os, const Ip4Address & addr)
-{
-    std::array<Ip4Address::addr_t, 4> q = addr.quadruple();
-
-    os << q[0] << "." << q[1] << "." << q[2] << "." << q[3];
-    return os;
-}
+std::ostream & operator<<(std::ostream & os, const Ip4Address & addr);
 
 #endif
