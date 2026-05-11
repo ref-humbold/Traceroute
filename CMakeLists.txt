@@ -14,7 +14,7 @@ set(TEST_EXE_OUTPUT_DIR "${OUTPUT_DIR}/test")
 set(LIB_OUTPUT_DIR "${OUTPUT_DIR}/dist")
 
 # COMPILER
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-unknown-pragmas -O2")
 
 # PACKAGES

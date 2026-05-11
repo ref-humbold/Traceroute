@@ -1,10 +1,10 @@
 # VERSION 21
 Language: Cpp
-Standard: c++17
+Standard: c++20
 LineEnding: DeriveLF
 
 AccessModifierOffset: -4
-AlignAfterOpenBracket: DontAlign #22 false
+AlignAfterOpenBracket: AlwaysBreak #22 false
 AlignArrayOfStructures: None
 AlignConsecutiveAssignments: None
 AlignConsecutiveBitFields: None
@@ -13,12 +13,12 @@ AlignConsecutiveMacros: None
 AlignConsecutiveShortCaseStatements:
   Enabled: false
 AlignEscapedNewlines: DontAlign
-AlignOperands: Align
+AlignOperands: DontAlign
 AlignTrailingComments:
   Kind: Never
   OverEmptyLines: 0
-AllowAllArgumentsOnNextLine: false
-AllowAllParametersOfDeclarationOnNextLine: true
+AllowAllArgumentsOnNextLine: true
+AllowAllParametersOfDeclarationOnNextLine: false
 AllowBreakBeforeNoexceptSpecifier: OnlyWithParen
 AllowShortBlocksOnASingleLine: Never
 AllowShortCaseExpressionOnASingleLine: true
@@ -38,15 +38,15 @@ BitFieldColonSpacing: Both
 BracedInitializerIndentWidth: 4
 BreakAdjacentStringLiterals: false
 BreakAfterAttributes: Always
-#22 BreakAfterOpenBracketBracedList: false
-#22 BreakAfterOpenBracketFunction: false
+#22 BreakAfterOpenBracketBracedList: true
+#22 BreakAfterOpenBracketFunction: true
 #22 BreakAfterOpenBracketIf: false
 #22 BreakAfterOpenBracketLoop: false
 #22 BreakAfterOpenBracketSwitch: false
 BreakAfterReturnType: ExceptShortType
 BreakBeforeBinaryOperators: NonAssignment
 BreakBeforeBraces: Allman
-#22 BreakBeforeCloseBracketBracedList: false
+#22 BreakBeforeCloseBracketBracedList: true
 #22 BreakBeforeCloseBracketFunction: false
 #22 BreakBeforeCloseBracketIf: false
 #22 BreakBeforeCloseBracketLoop: false
@@ -55,7 +55,8 @@ BreakBeforeConceptDeclarations: Always
 BreakBeforeTemplateCloser: true
 BreakBeforeTernaryOperators: true
 BreakBinaryOperations: Never
-#23  Default: Never
+#23 BreakBinaryOperations:
+#23   Default: Never
 BreakConstructorInitializers: BeforeColon
 BreakFunctionDefinitionParameters: false
 BreakInheritanceList: BeforeColon
@@ -65,7 +66,7 @@ ColumnLimit: 100
 CompactNamespaces: false
 ConstructorInitializerIndentWidth: 4
 ContinuationIndentWidth: 8
-Cpp11BracedListStyle: true
+Cpp11BracedListStyle: true #22 FunctionCall
 DerivePointerAlignment: false
 EmptyLineAfterAccessModifier: Never
 EmptyLineBeforeAccessModifier: Always

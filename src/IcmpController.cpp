@@ -15,7 +15,7 @@ void IcmpController::echo_request(const Ip4Address & address, uint16_t id, uint1
     }
 }
 
-RepliesMap IcmpController::echo_reply(uint16_t id, uint16_t ttl)
+RepliesMap IcmpController::echo_reply(uint16_t id, uint16_t ttl) const
 {
     RepliesMap replies_map;
     fd_set fd;
@@ -85,14 +85,10 @@ std::tuple<const iphdr *, const icmphdr *, const uint8_t *> IcmpController::extr
     return std::make_tuple(header_ip, header_icmp, body);
 }
 
-std::optional<Ip4Address> IcmpController::receive_echo(uint16_t id, uint16_t ttl)
+std::optional<Ip4Address> IcmpController::receive_echo(uint16_t id, uint16_t ttl) const
 {
     SocketReceiver::Message message = receiver.receive();
-    const iphdr * header_ip;
-    const icmphdr * header_icmp;
-    const uint8_t * body;
-
-    std::tie(header_ip, header_icmp, body) = extract_headers(message.message().data());
+    auto [header_ip, header_icmp, body] = extract_headers(message.message().data());
 
     if(header_icmp->type == 0)
     {
